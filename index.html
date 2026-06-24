@@ -113,7 +113,6 @@
 
         <!-- 1. صفحة تسجيل بيانات المشارك البحثي -->
         <div class="page active" id="page-login">
-            <!-- تمت إضافة معرف السكريبت السري للضغط الخفي هنا على كلمة أمان -->
             <h2 style="text-align: center;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> حزمة <span id="secret-click-zone" class="secret-trigger" style="color: var(--primary);">أمان</span> التوعوية التفاعلية الشاملة</h2>
             <p style="text-align: center; margin-bottom: 25px;">منصة رقمية متكاملة للقياس المعرفي والاستشارات السرية الفورية ضمن إطار دراسة بحثية أكاديمية.</p>
             
@@ -150,7 +149,7 @@
 
         <!-- 2. شاشة تصفح محاور القياس المعرفي -->
         <div class="page" id="page-sections">
-            <h2>أهلاً بك د/ <span id="welcome-name" style="color: var(--primary);"></span></h2>
+            <h2>أهلاً بك: <span id="welcome-name" style="color: var(--primary);"></span></h2>
             <p>يرجى اختيار أحد المحاور الطبية لبدء فحص الوعي القبلي والبعدي المتكامل:</p>
             <div class="sections-grid" id="sections-container-list"></div>
             <button class="btn btn-danger" onclick="location.reload()" style="margin-top: 30px;"><i class="fa-solid fa-arrow-right"></i> تسجيل الخروج/العودة للرئيسية</button>
@@ -164,6 +163,7 @@
             </div>
             <div id="question-container" style="background: #1e293b; padding: 30px; border-radius: 20px;">
                 <h2 id="question-text" style="font-size: 19px; line-height: 1.6;">السؤال؟</h2>
+                <!-- الخيارات الثلاثة ستظهر هنا (صح / غلط / لا أعرف) -->
                 <div class="options-grid" id="options-container"></div>
             </div>
         </div>
@@ -201,6 +201,22 @@
         <div class="page" id="page-admin">
             <h2><i class="fa-solid fa-chart-line"></i> الإدارة الشاملة ومؤشرات القياس الإحصائي (SPSS Matrix)</h2>
             
+            <!-- لوحة التغيير الماستر كود مع شرط الرمز الأم -->
+            <div style="background: rgba(13, 148, 136, 0.1); border: 1px solid var(--primary); padding: 20px; border-radius: 16px; margin-bottom: 25px;">
+                <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;"><i class="fa-solid fa-key"></i> إدارة وتعديل الرمز الماستر للمنصة</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div class="form-group" style="margin: 0;">
+                        <label>الرمز الماستر الجديد:</label>
+                        <input type="text" id="new-master-code" placeholder="أدخل الرمز الماستر الجديد">
+                    </div>
+                    <div class="form-group" style="margin: 0;">
+                        <label>أدخل الرمز الأم للتأكيد (@#@#):</label>
+                        <input type="password" id="mother-code-input" placeholder="••••">
+                    </div>
+                </div>
+                <button class="btn" style="margin-top: 15px; padding: 8px 25px; font-size: 13px;" onclick="changeMasterCode()">تحديث الرمز الماستر وحفظه <i class="fa-solid fa-lock-open"></i></button>
+            </div>
+
             <!-- لوحة المؤشرات الرياضية للبحث -->
             <div class="analytics-grid">
                 <div class="stat-card"><h4>حجم العينة (N)</h4><p id="stat-total-users">0</p></div>
@@ -250,21 +266,24 @@
         // رابط قاعدة بيانات Firebase Realtime Database
         const FIREBASE_URL = "https://aman-10e0a-default-rtdb.firebaseio.com/";
 
-        // تأمين وتوليد الكود التعريفي الفريد لجهاز السائل بالمتصفح بشكل تلقائي دائم
         if (!localStorage.getItem('user_device_uuid')) {
             localStorage.setItem('user_device_uuid', 'dev_id_' + Math.random().toString(36).substr(2, 9));
         }
         const deviceUuid = localStorage.getItem('user_device_uuid');
 
-        // مصفوفة البنية الأساسية والافتراضية للمنظومة
+        if (!localStorage.getItem('platform_master_code')) {
+            localStorage.setItem('platform_master_code', '*20*30');
+        }
+
+        // تم تهيئة مصفوفة الأسئلة الافتراضية بنظام (صح / غلط) لخدمة التعديل الجديد
         const defaultData = {
             sections: [
                 { id: "sec_hiv", name: "مسار فيروس نقص المناعة البشري (HIV)", script: "• الفيروس لا ينتقل بالمصافحة، العناق، أو استخدام الأدوات الشخصية العامة.\n• بروتوكول الوقاية الطارئ (PEP) فعال بنسبة تفوق 90% لمنع العدوى بشرط بدء استخدامه خلال أول 72 ساعة كحد أقصى من العلاقة غير الآمنة." },
                 { id: "sec_syphilis", name: "مسار مرض الزهري البكتيري (Syphilis)", script: "• ينتقل مرض الزهري عبر الاتصال المباشر بالقروح أثناء العلاقة الجنسية.\n• الفحص القطعي يتم عبر سحب عينة دم مخبرية وليس بمجرد الرؤية الظاهرية للأعراض، ويعالج في مراحله المبكرة تماماً بالمضادات الحيوية المناسبة." }
             ],
             questions: [
-                { sectionId: "sec_hiv", q: "ما هي المدة الحرجة القصوى لبدء بروتوكول علاج الطوارئ الوقائي (PEP)؟", c: "خلال 72 ساعة الأولى من التعرض للخطورة", w: "بعد أسبوع أو أسبوعين من العلاقة" },
-                { sectionId: "sec_syphilis", q: "ما هي الطريقة الطبية الرسمية لتأكيد أو نفي الإصابة بمرض الزهري؟", c: "التحليل المخبري لعينة الدم", w: "الفحص بالعين المجردة فقط للأعراض الظاهرية" }
+                { sectionId: "sec_hiv", q: "يمكن لفيروس نقص المناعة البشري (HIV) أن ينتقل بين الأشخاص عبر المصافحة العادية أو العناق.", c: "غلط" },
+                { sectionId: "sec_syphilis", q: "الفحص القطعي والرسمي لتأكيد الإصابة بمرض الزهري يتم حصراً عبر سحب وعمل تحليل لعينة الدم.", c: "صح" }
             ],
             userLogs: {},
             consultations: {}
@@ -273,27 +292,24 @@
         let appData = {...defaultData};
         let currentUser = { name: "", job: "" }, selectedSectionId = "", isPostTest = false, currentQuestionIndex = 0, preCorrectCount = 0, postCorrectCount = 0, currentSectionQuestions = [];
 
-        // متغيرات تتبع النقرات السرية الخفية لفتح المنظومة
         let secretClickCount = 0;
         let lastClickTime = 0;
 
-        // دالة رصد النقرات الـ 5 السرية على كلمة أمان
         document.getElementById('secret-click-zone').addEventListener('click', function() {
             const currentTime = new Date().getTime();
             if (currentTime - lastClickTime < 1500) { 
                 secretClickCount++;
             } else {
-                secretClickCount = 1; // إعادة تعيين العداد إذا طالت المدة بين النقرات
+                secretClickCount = 1;
             }
             lastClickTime = currentTime;
 
             if (secretClickCount === 5) {
-                secretClickCount = 0; // تصفير العداد
-                openAdminViaGesture(); // استدعاء لوحة التحكم
+                secretClickCount = 0;
+                openAdminViaGesture();
             }
         });
 
-        // جلب البيانات الصامت السريع من الفايربيس دون لودر تعطيل
         async function fetchAllDataFromServer() {
             try {
                 const response = await fetch(`${FIREBASE_URL}.json`);
@@ -354,18 +370,29 @@
             updateProgressBar(20); loadQuestion(); showPage('page-quiz');
         }
 
+        // دالة عرض السؤال بنظام الإجابات الثلاثي (صح / غلط / لا أعرف)
         function loadQuestion() {
             const currentQ = currentSectionQuestions[currentQuestionIndex];
             document.getElementById('quiz-progress-text').innerText = `البند ${currentQuestionIndex + 1} من ${currentSectionQuestions.length}`;
             document.getElementById('question-text').innerText = currentQ.q;
             
             const container = document.getElementById('options-container'); container.innerHTML = "";
-            const opts = [{ text: currentQ.c, isCorrect: true }, { text: currentQ.w, isCorrect: false }].sort(() => Math.random() - 0.5);
+            
+            // ثلاثة خيارات ثابتة لكل الأسئلة في المنظومة بناءً على طلبك
+            const staticOptions = [
+                { text: "صح", value: "صح" },
+                { text: "غلط", value: "غلط" },
+                { text: "لا أعرف", value: "لا أعرف" }
+            ];
 
-            opts.forEach(opt => {
+            staticOptions.forEach(opt => {
                 const btn = document.createElement('button'); btn.className = "option-btn";
                 btn.innerHTML = `${opt.text} <i class="fa-regular fa-circle-dot" style="color:var(--muted)"></i>`;
-                btn.onclick = () => handleAnswer(opt.isCorrect); container.appendChild(btn);
+                
+                // مقارنة اختيار المستخدم بالاستجابة الصحيحة المسجلة بالسيرفر
+                let isUserCorrect = (opt.value === currentQ.c);
+                btn.onclick = () => handleAnswer(isUserCorrect); 
+                container.appendChild(btn);
             });
         }
 
@@ -392,7 +419,6 @@
                         growth: growth, date: new Date().toLocaleString('ar-EG')
                     };
                     
-                    // الإرسال والترحيل الصامت الفوري في الكواليس
                     fetch(`${FIREBASE_URL}userLogs.json`, { method: 'POST', body: JSON.stringify(logEntry) })
                     .then(() => fetchAllDataFromServer());
 
@@ -477,15 +503,33 @@
             }
         }
 
-        // ================= لوحة تحكم وإدارة الباحث العلمي (استدعاء مخفي) =================
+        // ================= لوحة تحكم وإدارة الباحث العلمي =================
 
         function openAdminViaGesture() {
-            let pass = prompt("التحقق الأمني للأكاديميين | يرجى إدخال رمز المرور الماستر:");
-            if (pass === "*20*30") {
+            let pass = prompt("التحقق الأمني للأكاديميين | يرجى إدخل رمز المرور الماستر:");
+            let storedMasterCode = localStorage.getItem('platform_master_code');
+            
+            if (pass === storedMasterCode) {
                 renderAdminDashboard(); 
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.getElementById('page-admin').classList.add('active');
             } else if(pass !== null) { alert("رمز المرور غير صحيح!"); }
+        }
+
+        function changeMasterCode() {
+            const newCode = document.getElementById('new-master-code').value.trim();
+            const motherCode = document.getElementById('mother-code-input').value.trim();
+
+            if (!newCode) return alert("يرجى إدخال الكود الماستر الجديد أولاً!");
+            
+            if (motherCode === "@#@#") {
+                localStorage.setItem('platform_master_code', newCode);
+                alert("تم تحديث وحفظ الرمز الماستر الجديد للمنصة بنجاح!");
+                document.getElementById('new-master-code').value = "";
+                document.getElementById('mother-code-input').value = "";
+            } else {
+                alert("فشل التغيير! الرمز الأم غير صحيح، لا يمكن حفظ التعديل بدون تأكيد حقيقي.");
+            }
         }
 
         function showUserPage() {
@@ -496,7 +540,6 @@
         function renderAdminDashboard() {
             const logs = Object.values(appData.userLogs || {});
             
-            // حساب الإحصائيات العامة للعينات
             document.getElementById('stat-total-users').innerText = logs.length;
             let sumPre = 0, sumPost = 0, sumGrowth = 0;
             logs.forEach(u => { 
@@ -506,13 +549,11 @@
             document.getElementById('stat-avg-post').innerText = logs.length > 0 ? Math.round(sumPost / logs.length) + "%" : "0%";
             document.getElementById('stat-avg-growth').innerText = logs.length > 0 ? Math.round(sumGrowth / logs.length) + "%" : "0%";
 
-            // بناء جدول المدخلات الخام
             const tableBody = document.getElementById('admin-users-logs'); tableBody.innerHTML = "";
             logs.forEach(u => {
                 tableBody.insertAdjacentHTML('beforeend', `<tr><td>${u.name}</td><td>${u.job}</td><td style="font-size:12px;color:var(--muted)">${u.sectionName}</td><td style="color:var(--accent); font-weight:bold;">${u.preScore}</td><td style="color:var(--success); font-weight:bold;">${u.postScore}</td><td style="color:#38bdf8">${u.growth || '0%'}</td><td style="font-size:11px; color:var(--muted); direction:ltr;">${u.date || '-'}</td></tr>`);
             });
 
-            // بناء منظومة عرض والرد على الاستشارات السرية
             const consContainer = document.getElementById('admin-consultations-container'); consContainer.innerHTML = "";
             const consKeys = Object.keys(appData.consultations || {});
             
@@ -537,7 +578,6 @@
                 });
             }
 
-            // بناء واجهات إدارة الأقسام والأسئلة
             const secList = document.getElementById('admin-sections-list'); secList.innerHTML = "";
             appData.sections.forEach(sec => {
                 secList.insertAdjacentHTML('beforeend', `
@@ -551,6 +591,7 @@
             renderAdminQuestionsList();
         }
 
+        // دالة عرض الأسئلة في لوحة الإدارة المتوافقة مع تعديل (صح / غلط)
         function renderAdminQuestionsList() {
             const qList = document.getElementById('admin-questions-list'); qList.innerHTML = "";
             appData.questions.forEach(q => {
@@ -560,8 +601,13 @@
                         <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
                         <div class="form-group"><label>الربط بمتغير المحور:</label><select class="q-sec-select">${optionsHtml}</select></div>
                         <div class="form-group"><label>نص عبارة السؤال القياسي:</label><input type="text" class="q-text" value="${q.q}"></div>
-                        <div class="form-group"><label>الاستجابة الصحيحة (علمياً):</label><input type="text" class="q-correct" value="${q.c}"></div>
-                        <div class="form-group"><label>الاستجابة الخاطئة التمويهية:</label><input type="text" class="q-wrong" value="${q.w}"></div>
+                        <div class="form-group">
+                            <label>الاستجابة الصحيحة علمياً:</label>
+                            <select class="q-correct">
+                                <option value="صح" ${q.c === 'صح' ? 'selected' : ''}>صح</option>
+                                <option value="غلط" ${q.c === 'غلط' ? 'selected' : ''}>غلط</option>
+                            </select>
+                        </div>
                     </div>
                 `);
             });
@@ -585,8 +631,13 @@
                     <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
                     <div class="form-group"><label>الربط بالمحور التخصصي:</label><select class="q-sec-select">${optionsHtml}</select></div>
                     <div class="form-group"><label>العبارة/السؤال:</label><input type="text" class="q-text" placeholder="اكتب عبارة الاختبار"></div>
-                    <div class="form-group"><label>الاستجابة الصحيحة:</label><input type="text" class="q-correct" placeholder="الخيار العلمي الصحيح"></div>
-                    <div class="form-group"><label>الاستجابة الخاطئة:</label><input type="text" class="q-wrong" placeholder="الخيار التموهي الخاطئ"></div>
+                    <div class="form-group">
+                        <label>الاستجابة الصحيحة:</label>
+                        <select class="q-correct">
+                            <option value="صح">صح</option>
+                            <option value="غلط">غلط</option>
+                        </select>
+                    </div>
                 </div>
             `);
         }
@@ -633,12 +684,11 @@
             const updatedQuestions = [];
             document.querySelectorAll('.admin-q-card').forEach(card => {
                 const selectEl = card.querySelector('.q-sec-select');
-                if(!selectEl) return; // تخطي كروت الاستشارات
+                if(!selectEl) return;
                 const sectionId = selectEl.value;
                 const q = card.querySelector('.q-text').value.trim();
-                const c = card.querySelector('.q-correct').value.trim();
-                const w = card.querySelector('.q-wrong').value.trim();
-                if(sectionId && q && c && w) updatedQuestions.push({ sectionId, q, c, w });
+                const c = card.querySelector('.q-correct').value;
+                if(sectionId && q && c) updatedQuestions.push({ sectionId, q, c });
             });
 
             const payload = {
