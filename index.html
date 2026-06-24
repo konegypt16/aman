@@ -35,7 +35,6 @@
         
         .container { background: var(--card); border-radius: 24px; width: 100%; max-width: 950px; padding: 40px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
         
-        /* شاشة الصيانة والتحديث الفورية */
         #maintenance-screen { display: none; position: fixed; top:0; left:0; width:100vw; height:100vh; background: var(--bg); z-index: 999999; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; }
         #maintenance-screen i { font-size: 70px; color: var(--accent); margin-bottom: 25px; animation: pulse 2s infinite; }
         #maintenance-screen h1 { font-size: 28px; margin-bottom: 15px; color: var(--text); }
@@ -111,7 +110,6 @@
 </head>
 <body>
 
-    <!-- واجهة وضع الانتظار والتحديث المباشر للمستخدمين -->
     <div id="maintenance-screen">
         <i class="fa-solid fa-screwdriver-wrench"></i>
         <h1>برجاء الانتظار</h1>
@@ -123,7 +121,6 @@
             <div class="progress-bar" id="global-progress-bar"></div>
         </div>
 
-        <!-- 1. صفحة تسجيل الدخول ومتابعة الاستشارات -->
         <div class="page active" id="page-login">
             <h2 style="text-align: center;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> حزمة <span id="secret-click-zone" class="secret-trigger" style="color: var(--primary);">أمان</span> التوعوية التفاعلية الشاملة</h2>
             <p style="text-align: center; margin-bottom: 25px;">منصة رقمية متكاملة للقياس المعرفي والاستشارات السرية الفورية ضمن إطار دراسة بحثية أكاديمية.</p>
@@ -158,7 +155,6 @@
             </div>
         </div>
 
-        <!-- 2. شاشة تصفح محاور القياس المعرفي -->
         <div class="page" id="page-sections">
             <h2>أهلاً بك: <span id="welcome-name" style="color: var(--primary);"></span></h2>
             <p>يرجى اختيار أحد المحاور لبدء فحص الوعي القبلي والبعدي المتكامل:</p>
@@ -166,7 +162,6 @@
             <button class="btn btn-danger" onclick="location.reload()" style="margin-top: 30px;"><i class="fa-solid fa-arrow-right"></i> تسجيل الخروج/العودة للرئيسية</button>
         </div>
 
-        <!-- 3. صفحة مصفوفة أسئلة القياس التفاعلي -->
         <div class="page" id="page-quiz">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h3 id="quiz-type-title" style="color: var(--accent); margin: 0;">أداة القياس</h3>
@@ -178,7 +173,6 @@
             </div>
         </div>
 
-        <!-- 4. صفحة عرض المادة العلمية التمكينية -->
         <div class="page" id="page-awareness">
             <h2><i class="fa-solid fa-book-medical" style="color:var(--primary)"></i> الدليل الوقائي والتوعوي المعتمد</h2>
             <p>يرجى قراءة المادة التوعوية التالية بتمعن لتصحيح المفاهيم قبل اختبار قياس الاستفادة البعدي:</p>
@@ -187,7 +181,6 @@
             <button class="btn btn-block" onclick="startPostQuiz()">الانتقال إلى الاختبار البعدي لقياس الأثر المعرفي <i class="fa-solid fa-arrow-left"></i></button>
         </div>
 
-        <!-- 5. صفحة عرض كارت التمكين والنتائج الإحصائية الفردية -->
         <div class="page" id="page-result">
             <h2 style="text-align: center;"><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> اكتمل المحور البحثي بنجاح</h2>
             <div class="badge-wrapper">
@@ -205,7 +198,6 @@
             <button class="btn btn-block" onclick="showSectionsPage()"><i class="fa-solid fa-arrow-rotate-right"></i> العودة لقائمة المسارات البحثية والمتابعة</button>
         </div>
 
-        <!-- 6. لوحة تحكم د/ أماني الأكاديمية -->
         <div class="page" id="page-admin">
             <h2><i class="fa-solid fa-chart-line" style="color:var(--primary)"></i> أهلاً بكِ يا دكتورة أماني في لوحة الإدارة الأكاديمية</h2>
             <p style="margin-bottom: 25px;">مصفوفة القياس الإحصائي المخصصة لمتابعة الاستجابات وعينة البحث العلمي الحالية.</p>
@@ -226,7 +218,15 @@
             <h3 style="color: var(--accent);"><i class="fa-solid fa-envelope-open-text"></i> الاستشارات الواردة للرد</h3>
             <div class="admin-consultations-container" style="background:#0b0f19; padding:20px; border-radius:16px; margin-bottom:30px;"></div>
 
-            <h3 style="margin-top: 35px;"><i class="fa-solid fa-database"></i> جدول البيانات الإحصائية الخام (Raw Data Matrix)</h3>
+            <h3 style="margin-top:30px; color: var(--primary);"><i class="fa-solid fa-folder-plus"></i> إدارة المحاور العلمية والمادة التوعوية</h3>
+            <div class="admin-sections-list" id="amany-sections-list" style="background: #0b0f19; padding: 25px; border-radius: 16px; margin-bottom: 15px;"></div>
+            <button class="btn btn-accent" style="margin-bottom: 30px;" onclick="addNewSectionField()"><i class="fa-solid fa-plus"></i> إضافة محور/سكشن جديد</button>
+
+            <h3 style="margin-top: 15px; color: var(--accent);"><i class="fa-solid fa-file-medical-question"></i> بنود عبارات الأسئلة والتقييم (صح / غلط)</h3>
+            <div id="amany-questions-list" style="margin-bottom: 15px;"></div>
+            <button class="btn btn-accent" style="margin-bottom: 35px;" onclick="addNewQuestionField()"><i class="fa-solid fa-plus"></i> إضافة سؤال قياسي جديد</button>
+
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-database"></i> جدول البيانات الإحصائية الخام (Raw Data Matrix)</h3>
             <div style="max-height: 300px; overflow-y: auto; background: #1e293b; padding: 10px; border-radius: 12px; margin-top: 10px;">
                 <table class="users-table">
                     <thead><tr><th>المشارك</th><th>التخصص</th><th>المسار</th><th>قبلّي</th><th>بعدّي</th><th>معدل النمو</th><th>التاريخ والوقت</th></tr></thead>
@@ -234,10 +234,10 @@
                 </table>
             </div>
             <br>
+            <button class="btn btn-block" style="background: var(--success); margin-bottom: 15px;" onclick="saveAdminAllData()">حفظ وتثبيت كافة التعديلات والمحاور سحابياً <i class="fa-solid fa-cloud-arrow-up"></i></button>
             <button class="btn btn-danger btn-block" onclick="showUserPage()">الخروج والعودة لواجهة المنصة</button>
         </div>
 
-        <!-- 7. لوحة تحكم المطور الحصرية الخارقة للبشمهندس محمد -->
         <div class="page" id="page-dev">
             <div class="server-status">
                 <div class="server-pulse"></div>
@@ -246,14 +246,12 @@
             <h2><i class="fa-solid fa-terminal" style="color:#38bdf8"></i> لوحة تحكم المطور الخارقة <span class="dev-badge">Super Admin</span></h2>
             <p style="margin-bottom: 25px;">أهلاً بك يا بشمهندس محمد. لديك التحكم الكامل والمطلق بملفات الموقع ومسارات البيانات السحابية.</p>
 
-            <!-- 🚨 الميزة الجديدة المضافة: زر القفل السحابي الفوري ووضع الانتظار -->
             <div class="dev-box" style="border-color: var(--danger); background: rgba(239, 68, 68, 0.02);">
                 <h3 style="color: var(--danger);"><i class="fa-solid fa-power-off"></i> زر القفل والتحكم في حالة الموقع (Kill Switch)</h3>
                 <p style="font-size: 13px; margin-bottom: 15px;">بضغطة واحدة، يمكنك حظر الزوار وإظهار شاشة (برجاء الانتظار يتم التحديث الآن) فوراً لحين انتهائك.</p>
                 <button id="dev-toggle-lock-btn" class="btn btn-danger" onclick="togglePlatformLock()">جاري فحص حالة السيرفر...</button>
             </div>
 
-            <!-- نظام المطابقة والأكواد الثلاثية المعزولة -->
             <div class="dev-box" style="background: rgba(56, 189, 248, 0.03); border-color: rgba(56, 189, 248, 0.25);">
                 <h3 style="color: #38bdf8;"><i class="fa-solid fa-shield-halved"></i> نظام التحكم والمطابقة الكلية بالأكواد</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
@@ -275,7 +273,6 @@
                 </div>
             </div>
 
-            <!-- أدوات المحاكاة وتوليد الداتا الوهمية -->
             <div class="dev-box">
                 <h3 style="color:#38bdf8;"><i class="fa-solid fa-flask"></i> نظام محاكاة واختبار البيانات (System Simulator)</h3>
                 <button class="btn btn-accent" style="background:#38bdf8; color:#000;" onclick="generateMockData()">توليد 10 عينات مشاركين عشوائية <i class="fa-solid fa-bolt"></i></button>
@@ -284,7 +281,6 @@
                 <button class="btn btn-danger" style="background:#b91c1c;" onclick="resetToDefault()">تهيئة النظام بالكامل للافتراضي <i class="fa-solid fa-trash-can"></i></button>
             </div>
 
-            <!-- أدوات التصدير الخارجي للبيانات -->
             <div class="dev-box">
                 <h3 style="color:var(--success);"><i class="fa-solid fa-file-excel"></i> مركز تصدير التقارير الإحصائية (Premium Export)</h3>
                 <button class="btn" style="background:var(--success);" onclick="exportToCSV()">تصدير جدول الـ SPSS كـ ملف Excel / CSV <i class="fa-solid fa-file-csv"></i></button>
@@ -328,7 +324,6 @@
         if ('serviceWorker' in navigator) { navigator.serviceWorker.getRegistrations().then(regs => { for(let r of regs) r.unregister(); }); }
         if ('caches' in window) { caches.keys().then(names => { for (let name of names) caches.delete(name); }); }
 
-        // رابط قاعدة البيانات السحابية الخاصة بك
         const FIREBASE_URL = "https://aman-10e0a-default-rtdb.firebaseio.com/";
 
         if (!localStorage.getItem('user_device_uuid')) {
@@ -351,14 +346,14 @@
                 devCode: "104230",
                 parentCode: "104230",
                 amanyCode: "*20*30",
-                isLocked: false // الحالة التلقائية للموقع (مفتوح)
+                isLocked: false
             }
         };
 
         let appData = {...defaultData};
         let currentUser = { name: "", job: "" }, selectedSectionId = "", isPostTest = false, currentQuestionIndex = 0, preCorrectCount = 0, postCorrectCount = 0, currentSectionQuestions = [];
         let secretClickCount = 0, lastClickTime = 0;
-        let isDevActive = false; // يحدد إذا كان المطور داخل لوحته لمنع قفله هو شخصياً
+        let isDevActive = false;
 
         document.getElementById('secret-click-zone').addEventListener('click', function() {
             const currentTime = new Date().getTime();
@@ -368,7 +363,6 @@
             if (secretClickCount === 5) { secretClickCount = 0; openAdminViaGesture(); }
         });
 
-        // سحب ومراقبة مستمرة لحالة القفل السحابي والمزامنة الصامتة
         async function fetchAllDataFromServer() {
             try {
                 const response = await fetch(`${FIREBASE_URL}.json`);
@@ -383,15 +377,17 @@
                     await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
                 }
                 
-                // معالجة القفل والتعطيل للمستخدمين
                 handleLockMechanism();
 
                 if(appData.serverConfig) {
-                    document.getElementById('dev-my-own-code').value = appData.serverConfig.devCode || "104230";
-                    document.getElementById('dev-parent-code-input').value = appData.serverConfig.parentCode || "104230";
-                    document.getElementById('dev-amany-code-input').value = appData.serverConfig.amanyCode || "*20*30";
+                    const devCodeInput = document.getElementById('dev-my-own-code');
+                    const parentCodeInput = document.getElementById('dev-parent-code-input');
+                    const amanyCodeInput = document.getElementById('dev-amany-code-input');
+
+                    if (document.activeElement !== devCodeInput) devCodeInput.value = appData.serverConfig.devCode || "104230";
+                    if (document.activeElement !== parentCodeInput) parentCodeInput.value = appData.serverConfig.parentCode || "104230";
+                    if (document.activeElement !== amanyCodeInput) amanyCodeInput.value = appData.serverConfig.amanyCode || "*20*30";
                     
-                    // تحديث واجهة زر القفل داخل لوحة المطور
                     const lockBtn = document.getElementById('dev-toggle-lock-btn');
                     if(appData.serverConfig.isLocked) {
                         lockBtn.innerHTML = 'تعطيل وضع التحديث وتشغيل الموقع فوراً للكل <i class="fa-solid fa-play"></i>';
@@ -406,14 +402,12 @@
             } catch (error) { console.log("السيستم يعمل محلياً بسرعة قصوى."); }
         }
         
-        // تشغيل مراقبة في الخلفية كل ثانيتين للتحديث التلقائي الفوري بدون شاشات تحميل
-        setInterval(fetchAllDataFromServer, 2000);
+        setInterval(fetchAllDataFromServer, 4000);
         window.onload = fetchAllDataFromServer;
 
         function handleLockMechanism() {
             const mScreen = document.getElementById('maintenance-screen');
             if (appData.serverConfig && appData.serverConfig.isLocked === true) {
-                // لو السيرفر مغلق والمفتوح مش لوحة المطور، اقفل الشاشة فوراً
                 if (!isDevActive) {
                     mScreen.style.display = "flex";
                 } else {
@@ -424,11 +418,9 @@
             }
         }
 
-        // دالة المطور لتبديل حالة القفل صامتاً
         async function togglePlatformLock() {
             let currentStatus = (appData.serverConfig && appData.serverConfig.isLocked === true);
             let nextStatus = !currentStatus;
-            
             await fetch(`${FIREBASE_URL}serverConfig/isLocked.json`, { method: 'PUT', body: JSON.stringify(nextStatus) });
             await fetchAllDataFromServer();
         }
@@ -438,8 +430,6 @@
             document.getElementById(id).classList.add('active');
             const pBar = document.getElementById('global-progress');
             pBar.style.display = (id === 'page-quiz' || id === 'page-awareness' || id === 'page-result') ? 'block' : 'none';
-            
-            // إذا خرج المطور للرئيسية نقوم بإعادة فحص الحظر
             isDevActive = (id === 'page-dev');
             handleLockMechanism();
         }
@@ -585,14 +575,12 @@
             if(confirm("هل تؤكد حذف هذه الاستشارة نهائياً؟")) {
                 await fetch(`${FIREBASE_URL}consultations/${key}.json`, { method: 'DELETE' });
                 await fetchAllDataFromServer();
-                if(document.getElementById('page-dev').classList.contains('active') || document.getElementById('page-admin').classList.contains('active')) {
-                    renderSharedDashboardData();
-                }
+                renderSharedDashboardData();
             }
         }
 
         function openAdminViaGesture() {
-            let pass = prompt("التحقق الأمني للمنصة | يرجى إدخال رمز المرور الماستر:");
+            let pass = prompt("التحقق الأمني للمنصة | يرجى إدخل رمز المرور الماستر:");
             if(pass === null || pass.trim() === "") return;
             pass = pass.trim();
 
@@ -675,50 +663,63 @@
         }
 
         function renderDevQuestionsList() {
-            const qList = document.getElementById('dev-questions-list'); if(!qList) return; qList.innerHTML = "";
-            appData.questions.forEach(q => {
-                let optionsHtml = appData.sections.map(s => `<option value="${s.id}" ${s.id===q.sectionId?'selected':''}>${s.name}</option>`).join('');
-                qList.insertAdjacentHTML('beforeend', `
-                    <div class="admin-q-card">
-                        <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
-                        <div class="form-group"><label>الربط بمتغير المحور:</label><select class="q-sec-select">${optionsHtml}</select></div>
-                        <div class="form-group"><label>نص عبارة السؤال القياسي:</label><input type="text" class="q-text" value="${q.q}"></div>
-                        <div class="form-group">
-                            <label>الاستجابة الصحيحة علمياً:</label>
-                            <select class="q-correct">
-                                <option value="صح" ${q.c === 'صح' ? 'selected' : ''}>صح</option>
-                                <option value="غلط" ${q.c === 'غلط' ? 'selected' : ''}>غلط</option>
-                            </select>
+            const qContainers = [document.getElementById('dev-questions-list'), document.getElementById('amany-questions-list')];
+            
+            qContainers.forEach(qList => {
+                if(!qList) return; 
+                qList.innerHTML = "";
+                appData.questions.forEach(q => {
+                    let optionsHtml = appData.sections.map(s => `<option value="${s.id}" ${s.id===q.sectionId?'selected':''}>${s.name}</option>`).join('');
+                    qList.insertAdjacentHTML('beforeend', `
+                        <div class="admin-q-card">
+                            <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
+                            <div class="form-group"><label>الربط بمتغير المحور:</label><select class="q-sec-select">${optionsHtml}</select></div>
+                            <div class="form-group"><label>نص عبارة السؤال القياسي:</label><input type="text" class="q-text" value="${q.q}"></div>
+                            <div class="form-group">
+                                <label>الاستجابة الصحيحة علمياً:</label>
+                                <select class="q-correct">
+                                    <option value="صح" ${q.c === 'صح' ? 'selected' : ''}>صح</option>
+                                    <option value="غلط" ${q.c === 'غلط' ? 'selected' : ''}>غلط</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                `);
+                    `);
+                });
             });
         }
 
         function addNewSectionField() {
             const id = "sec_" + Date.now();
-            document.querySelector('#page-dev .admin-sections-list').insertAdjacentHTML('beforeend', `
-                <div class="admin-sec-item" data-id="${id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
-                    <div class="form-group"><label>اسم المحور الجديد:</label><input type="text" class="sec-name" placeholder="مثال: محور التوعية الجديد"></div>
-                    <div class="form-group"><label>المادة التوعوية:</label><textarea class="sec-script" rows="3" placeholder="أدخل الدليل والمحتوى للمحور"></textarea></div>
-                    <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف</button>
-                </div>
-            `);
+            document.querySelectorAll('.admin-sections-list').forEach(list => {
+                list.insertAdjacentHTML('beforeend', `
+                    <div class="admin-sec-item" data-id="${id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
+                        <div class="form-group"><label>اسم المحور الجديد:</label><input type="text" class="sec-name" placeholder="مثال: محور التوعية الجديد"></div>
+                        <div class="form-group"><label>المادة التوعوية:</label><textarea class="sec-script" rows="3" placeholder="أدخل الدليل والمحتوى للمحور"></textarea></div>
+                        <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف</button>
+                    </div>
+                `);
+            });
         }
 
         function addNewQuestionField() {
             let optionsHtml = appData.sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-            document.getElementById('dev-questions-list').insertAdjacentHTML('beforeend', `
-                <div class="admin-q-card">
-                    <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
-                    <div class="form-group"><label>الربط بالمحور التخصصي:</label><select class="q-sec-select">${optionsHtml}</select></div>
-                    <div class="form-group"><label>العبارة/السؤال:</label><input type="text" class="q-text" placeholder="اكتب عبارة الاختبار"></div>
-                    <div class="form-group">
-                        <label>الاستجابة الصحيحة:</label>
-                        <select class="q-correct"><option value="صح">صح</option><option value="غلط">غلط</option></select>
-                    </div>
-                </div>
-            `);
+            const containers = ['dev-questions-list', 'amany-questions-list'];
+            containers.forEach(cId => {
+                const el = document.getElementById(cId);
+                if(el) {
+                    el.insertAdjacentHTML('beforeend', `
+                        <div class="admin-q-card">
+                            <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
+                            <div class="form-group"><label>الربط بالمحور التخصصي:</label><select class="q-sec-select">${optionsHtml}</select></div>
+                            <div class="form-group"><label>العبارة/السؤال:</label><input type="text" class="q-text" placeholder="اكتب عبارة الاختبار"></div>
+                            <div class="form-group">
+                                <label>الاستجابة الصحيحة:</label>
+                                <select class="q-correct"><option value="صح">صح</option><option value="غلط">غلط</option></select>
+                            </div>
+                        </div>
+                    `);
+                }
+            });
         }
 
         async function submitAdminAnswerToConsultation(key) {
@@ -841,7 +842,10 @@
 
         async function saveAdminAllData() {
             const updatedSections = [];
-            document.querySelectorAll('#page-dev .admin-sec-item').forEach(item => {
+            const activeSecItem = document.querySelector('.page.active .admin-sec-item');
+            const targetSecSelector = activeSecItem ? '.page.active .admin-sec-item' : '.admin-sec-item';
+            
+            document.querySelectorAll(targetSecSelector).forEach(item => {
                 const id = item.getAttribute('data-id');
                 const name = item.querySelector('.sec-name').value.trim();
                 const script = item.querySelector('.sec-script').value.trim();
@@ -849,7 +853,10 @@
             });
 
             const updatedQuestions = [];
-            document.querySelectorAll('#dev-questions-list .admin-q-card').forEach(card => {
+            const activeQCard = document.querySelector('.page.active .admin-q-card');
+            const targetQSelector = activeQCard ? '.page.active .admin-q-card' : '.admin-q-card';
+
+            document.querySelectorAll(targetQSelector).forEach(card => {
                 const selectEl = card.querySelector('.q-sec-select');
                 if(!selectEl) return;
                 const sectionId = selectEl.value;
@@ -858,9 +865,13 @@
                 if(sectionId && q && c) updatedQuestions.push({ sectionId, q, c });
             });
 
+            if(updatedSections.length === 0 && appData.sections.length > 0) {
+                if(!confirm("تنبيه: سيتم حفظ التعديلات، هل تود الاستمرار؟")) return;
+            }
+
             const payload = {
-                sections: updatedSections,
-                questions: updatedQuestions,
+                sections: updatedSections.length > 0 ? updatedSections : appData.sections,
+                questions: updatedQuestions.length > 0 ? updatedQuestions : appData.questions,
                 userLogs: appData.userLogs || {},
                 consultations: appData.consultations || {},
                 serverConfig: appData.serverConfig || { devCode: "104230", parentCode: "104230", amanyCode: "*20*30", isLocked: false }
