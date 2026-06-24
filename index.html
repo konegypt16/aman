@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المنصة البحثية الشاملة | أمان للتوعية والتمكين الرقمي</title>
     
+    <!-- الأكواد الجذرية لمنع المتصفح من حفظ الكاش وإجبار الزوار على تحميل الكود الجديد فوراً -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <!-- محركات البحث وحماية الخصوصية للبحث العلمي -->
     <meta name="description" content="منصة متكاملة للقياس المعرفي والاستشارات الطبية السرية في إطار دراسة أكاديمية معتمدة.">
     <meta name="robots" content="noindex, nofollow">
@@ -163,7 +168,6 @@
             </div>
             <div id="question-container" style="background: #1e293b; padding: 30px; border-radius: 20px;">
                 <h2 id="question-text" style="font-size: 19px; line-height: 1.6;">السؤال؟</h2>
-                <!-- الخيارات الثلاثة ستظهر هنا (صح / غلط / لا أعرف) -->
                 <div class="options-grid" id="options-container"></div>
             </div>
         </div>
@@ -201,8 +205,7 @@
         <div class="page" id="page-admin">
             <h2><i class="fa-solid fa-chart-line"></i> الإدارة الشاملة ومؤشرات القياس الإحصائي (SPSS Matrix)</h2>
             
-            <!-- لوحة التغيير الماستر كود مع شرط الرمز الأم -->
-            <div style="background: rgba(13, 148, 136, 0.1); border: 1px solid var(--primary); padding: 20px; border-radius: 16px; margin-bottom: 25px;">
+            <div style="background: rgba(13, 148, 136, 0.1); border: 1px solid var(--primary); padding: 20px; border-radius: 166px; margin-bottom: 25px;">
                 <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;"><i class="fa-solid fa-key"></i> إدارة وتعديل الرمز الماستر للمنصة</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                     <div class="form-group" style="margin: 0;">
@@ -217,7 +220,6 @@
                 <button class="btn" style="margin-top: 15px; padding: 8px 25px; font-size: 13px;" onclick="changeMasterCode()">تحديث الرمز الماستر وحفظه <i class="fa-solid fa-lock-open"></i></button>
             </div>
 
-            <!-- لوحة المؤشرات الرياضية للبحث -->
             <div class="analytics-grid">
                 <div class="stat-card"><h4>حجم العينة (N)</h4><p id="stat-total-users">0</p></div>
                 <div class="stat-card"><h4>متوسط القبلي (Pre-Avg)</h4><p id="stat-avg-pre" style="color: var(--accent);">0%</p></div>
@@ -225,14 +227,12 @@
                 <div class="stat-card"><h4>نسبة نمو المعرفة الفعلي</h4><p id="stat-avg-growth" style="color: #38bdf8;">0%</p></div>
             </div>
 
-            <!-- أزرار التحكم بالبيانات المخزنة -->
             <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); padding: 15px; border-radius: 16px; margin-bottom: 25px; display: flex; gap: 15px;">
                 <button class="btn btn-danger" style="margin:0; flex: 1; font-size:13px;" onclick="clearLogs('userLogs')"><i class="fa-solid fa-user-slash"></i> تصفير سجل درجات المشاركين</button>
                 <button class="btn btn-danger" style="margin:0; flex: 1; font-size:13px;" onclick="clearLogs('consultations')"><i class="fa-solid fa-comment-slash"></i> مسح الاستشارات الواردة</button>
                 <button class="btn btn-danger" style="margin:0; flex: 1; background:#b91c1c; font-size:13px;" onclick="resetToDefault()"><i class="fa-solid fa-trash-can"></i> تهيئة النظام للافتراضي</button>
             </div>
 
-            <!-- نظام الرد الفوري على الاستشارات السرية للزوار -->
             <h3 style="color: var(--accent);"><i class="fa-solid fa-envelope-open-text"></i> الاستشارات الواردة من عينة البحث للرد</h3>
             <div id="admin-consultations-container" style="background:#0b0f19; padding:20px; border-radius:16px; margin-bottom:30px;">
                 <p style="text-align:center; color:var(--muted)">لا توجد استشارات معلقة حالياً.</p>
@@ -259,11 +259,9 @@
         </div>
     </div>
 
-    <!-- شريط الحقوق الرسمي للبحث العلمي المعتمد للماجستير -->
     <div class="platform-footer">Made By DR/ Amany & <span>Mohamed Hossam</span></div>
 
     <script>
-        // رابط قاعدة بيانات Firebase Realtime Database
         const FIREBASE_URL = "https://aman-10e0a-default-rtdb.firebaseio.com/";
 
         if (!localStorage.getItem('user_device_uuid')) {
@@ -275,7 +273,6 @@
             localStorage.setItem('platform_master_code', '*20*30');
         }
 
-        // تم تهيئة مصفوفة الأسئلة الافتراضية بنظام (صح / غلط) لخدمة التعديل الجديد
         const defaultData = {
             sections: [
                 { id: "sec_hiv", name: "مسار فيروس نقص المناعة البشري (HIV)", script: "• الفيروس لا ينتقل بالمصافحة، العناق، أو استخدام الأدوات الشخصية العامة.\n• بروتوكول الوقاية الطارئ (PEP) فعال بنسبة تفوق 90% لمنع العدوى بشرط بدء استخدامه خلال أول 72 ساعة كحد أقصى من العلاقة غير الآمنة." },
@@ -370,7 +367,6 @@
             updateProgressBar(20); loadQuestion(); showPage('page-quiz');
         }
 
-        // دالة عرض السؤال بنظام الإجابات الثلاثي (صح / غلط / لا أعرف)
         function loadQuestion() {
             const currentQ = currentSectionQuestions[currentQuestionIndex];
             document.getElementById('quiz-progress-text').innerText = `البند ${currentQuestionIndex + 1} من ${currentSectionQuestions.length}`;
@@ -378,7 +374,6 @@
             
             const container = document.getElementById('options-container'); container.innerHTML = "";
             
-            // ثلاثة خيارات ثابتة لكل الأسئلة في المنظومة بناءً على طلبك
             const staticOptions = [
                 { text: "صح", value: "صح" },
                 { text: "غلط", value: "غلط" },
@@ -389,7 +384,6 @@
                 const btn = document.createElement('button'); btn.className = "option-btn";
                 btn.innerHTML = `${opt.text} <i class="fa-regular fa-circle-dot" style="color:var(--muted)"></i>`;
                 
-                // مقارنة اختيار المستخدم بالاستجابة الصحيحة المسجلة بالسيرفر
                 let isUserCorrect = (opt.value === currentQ.c);
                 btn.onclick = () => handleAnswer(isUserCorrect); 
                 container.appendChild(btn);
@@ -441,8 +435,6 @@
             showPage('page-result');
         }
 
-        // ================= منظومة الاستشارات السرية الفورية الصامتة =================
-
         function checkDeviceConsultationStatus() {
             const statusBox = document.getElementById('user-consultation-status');
             const formBox = document.getElementById('ask-consultation-form');
@@ -458,7 +450,7 @@
                         <div class="status-box status-waiting">
                             <h4><i class="fa-solid fa-clock-rotate-left" style="color: var(--accent);"></i> استشارتك قيد المراجعة الطبية البحثية حالياً...</h4>
                             <p style="color: white; margin-top: 8px;"><strong>سؤالك:</strong> ${userQ.question}</p>
-                            <span style="font-size: 11px; color: var(--muted);">سيظهر لك رد الطبيب الباحث هنا فور كتابته مباشرة وتثبيته سحابياً، دون الحاجة للبحث.</span>
+                            <span style="font-size: 11px; color: var(--muted);">سيظهر لك رد الطبيب الباحث هنا فور كتابته مباشرة وتثبيته سحابياً.</span>
                         </div>
                     `;
                 } else {
@@ -503,8 +495,6 @@
             }
         }
 
-        // ================= لوحة تحكم وإدارة الباحث العلمي =================
-
         function openAdminViaGesture() {
             let pass = prompt("التحقق الأمني للأكاديميين | يرجى إدخل رمز المرور الماستر:");
             let storedMasterCode = localStorage.getItem('platform_master_code');
@@ -528,7 +518,7 @@
                 document.getElementById('new-master-code').value = "";
                 document.getElementById('mother-code-input').value = "";
             } else {
-                alert("فشل التغيير! الرمز الأم غير صحيح، لا يمكن حفظ التعديل بدون تأكيد حقيقي.");
+                alert("فشل التغيير! الرمز الأم غير صحيح.");
             }
         }
 
@@ -571,7 +561,7 @@
                                 <label>اكتب الرد الطبي التمكيني المباشر لجهازه:</label>
                                 <textarea id="ans-input-${key}" rows="2" placeholder="اكتب الرد العلمي هنا...">${cItem.answer || ""}</textarea>
                             </div>
-                            <button class="btn" style="padding:6px 18px; font-size:12px; background:var(--success);" onclick="submitAdminAnswerToConsultation('${key}')">تثبيت وإرسال الرد صامت <i class="fa-solid fa-paper-plane"></i></button>
+                            <button class="btn" style="padding:6px 18px; font-size:12px; background:var(--success);" onclick="submitAdminAnswerToConsultation('${key}')">تثبيت وإرسال الرد <i class="fa-solid fa-paper-plane"></i></button>
                             <button class="btn btn-danger" style="padding:6px 18px; font-size:12px; margin-right:10px;" onclick="deleteConsultationItem('${key}').then(()=>renderAdminDashboard())">حذف</button>
                         </div>
                     `);
@@ -591,7 +581,6 @@
             renderAdminQuestionsList();
         }
 
-        // دالة عرض الأسئلة في لوحة الإدارة المتوافقة مع تعديل (صح / غلط)
         function renderAdminQuestionsList() {
             const qList = document.getElementById('admin-questions-list'); qList.innerHTML = "";
             appData.questions.forEach(q => {
@@ -648,23 +637,23 @@
 
             try {
                 await fetch(`${FIREBASE_URL}consultations/${key}/answer.json`, { method: 'PUT', body: JSON.stringify(ansText) });
-                alert("تم إرسال وتثبيت الرد لجهاز السائل بنجاح صامت كامل!");
+                alert("تم إرسال وتثبيت الرد لجهاز السائل بنجاح!");
                 await fetchAllDataFromServer();
                 renderAdminDashboard();
             } catch(e) { alert("خطأ بالاتصال السحابي"); }
         }
 
         async function clearLogs(nodePath) {
-            if(confirm(`هل أنت متأكد من مسح وحذف بيانات عقدة [${nodePath}] نهائياً من السيرفر؟`)) {
+            if(confirm(`هل أنت متأكد من مسح وحذف بيانات عقدة [${nodePath}] نهائياً؟`)) {
                 try {
                     await fetch(`${FIREBASE_URL}${nodePath}.json`, { method: 'DELETE' });
                     location.reload();
-                } catch(e) { alert("خطأ في الاتصال بالسيرفر السحابي"); }
+                } catch(e) { alert("خطأ في الاتصال"); }
             }
         }
 
         async function resetToDefault() {
-            if(confirm("هل تريد تصفير الداتابيز بالكامل واستعادة التهيئة الافتراضية الأولى للمنصة؟")) {
+            if(confirm("هل تريد تصفير الداتابيز بالكامل واستعادة التهيئة الافتراضية؟")) {
                 try {
                     await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
                     location.reload();
