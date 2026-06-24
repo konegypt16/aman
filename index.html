@@ -218,9 +218,16 @@
                 <p style="text-align:center; color:var(--muted)">لا توجد استشارات معلقة حالياً.</p>
             </div>
 
-            <h3><i class="fa-solid fa-folder-open"></i> محاور المسارات التعليمية الحالية</h3>
+            <h3><i class="fa-solid fa-folder-plus"></i> إدارة محاور المسارات التعليمية الحالية</h3>
             <div class="admin-sections-list" style="background: #0b0f19; padding: 25px; border-radius: 16px; margin-bottom: 25px;"></div>
+            <button class="btn btn-accent" onclick="addNewSectionField('page-admin')"><i class="fa-solid fa-plus"></i> إضافة محور/سكشن جديد</button>
             
+            <h3 style="margin-top:30px;"><i class="fa-solid fa-file-medical-question"></i> بنود العبارات والأسئلة القياسية</h3>
+            <div class="admin-questions-list" id="admin-questions-list"></div>
+            <button class="btn btn-accent" onclick="addNewQuestionField('admin-questions-list')"><i class="fa-solid fa-plus"></i> إضافة سؤال جديد للمنظومة</button>
+            <br><br>
+            <button class="btn btn-block" style="background: var(--success);" onclick="saveAdminAllData('page-admin', 'admin-questions-list')">حفظ وتثبيت كافة التعديلات والمحاور سحابياً <i class="fa-solid fa-cloud-arrow-up"></i></button>
+
             <h3 style="margin-top: 35px;"><i class="fa-solid fa-database"></i> جدول البيانات الإحصائية الخام (Raw Data Matrix)</h3>
             <div style="max-height: 300px; overflow-y: auto; background: #1e293b; padding: 10px; border-radius: 12px; margin-top: 10px;">
                 <table class="users-table">
@@ -241,18 +248,16 @@
             <p style="margin-bottom: 25px;">أهلاً بك يا بشمهندس محمد. لديك الصلاحيات المطلقة لإدارة السيرفر، الصيانة، وتغيير الأكواد بالكامل.</p>
 
             <div class="dev-box" style="background: rgba(245, 158, 11, 0.03); border-color: rgba(245, 158, 11, 0.25);">
-                <h3 style="color: var(--accent);"><i class="fa-solid fa-shield-halved"></i> 🎛️ لوحة إدارة الأكواد والخلية السحابية الماستر</h3>
-                <p style="font-size:13px; margin-bottom: 15px;">بصفتك المطور، يمكنك التحكم بالكود الأم وتحديث كود دكتورة أماني مباشرة من هنا وسينعكس فوراً سحابياً.</p>
+                <h3 style="color: var(--accent);"><i class="fa-solid fa-shield-halved"></i> 🎛️ لوحة عرض الأكواد الثابتة في النظام</h3>
+                <p style="font-size:13px; margin-bottom: 15px;">الأكواد الآن مثبتة داخل لغة برمجية المصدر ومحمية تماماً من مشاكل جلب السيرفر.</p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="form-group">
-                        <label>الكود الأم الماستر الحالي (Parent Key):</label>
-                        <input type="text" id="dev-parent-code-input" style="border-color: rgba(245,158,11,0.3);">
-                        <button class="btn btn-accent" style="padding: 6px 15px; font-size:12px; margin-top:10px;" onclick="updateParentCode()">تحديث الكود الأم الماستر <i class="fa-solid fa-square-check"></i></button>
+                        <label>الكود الأم الماستر (ثابت برمجياً):</label>
+                        <input type="text" id="dev-parent-code-input" value="104230" readonly style="border-color: rgba(245,158,11,0.3); background:#0b0f19; color:var(--muted)">
                     </div>
                     <div class="form-group">
-                        <label>كود دخول دكتورة أماني المباشر (Amany Code):</label>
-                        <input type="text" id="dev-amany-code-input" style="border-color: rgba(13,148,136,0.3);">
-                        <button class="btn" style="padding: 6px 15px; font-size:12px; margin-top:10px;" onclick="updateAmanyCodeDirectly()">تعديل كود أماني فوراً <i class="fa-solid fa-user-lock"></i></button>
+                        <label>كود دخول دكتورة أماني (الحالي محلياً):</label>
+                        <input type="text" id="dev-amany-code-input" readonly style="border-color: rgba(13,148,136,0.3); background:#0b0f19; color:var(--muted)">
                     </div>
                 </div>
             </div>
@@ -283,13 +288,13 @@
             <h3><i class="fa-solid fa-envelope-open-text"></i> الاستشارات الواردة (صلاحية رد المطور)</h3>
             <div class="admin-consultations-container" style="background:#0b0f19; padding:20px; border-radius:16px; margin-bottom:30px;"></div>
 
-            <h3><i class="fa-solid fa-folder-plus"></i> إدارة المحاور والأسئلة (تعديل الهيكل السحابي)</h3>
+            <h3><i class="fa-solid fa-folder-plus"></i> إدارة المحاور والأسئلة (تعديل الهيكل السحابي للمطور)</h3>
             <div class="admin-sections-list" style="background: #0b0f19; padding: 25px; border-radius: 16px; margin-bottom: 25px;"></div>
-            <button class="btn btn-accent" onclick="addNewSectionField()"><i class="fa-solid fa-plus"></i> إضافة محور/سكشن جديد</button>
+            <button class="btn btn-accent" onclick="addNewSectionField('page-dev')"><i class="fa-solid fa-plus"></i> إضافة محور/سكشن جديد</button>
 
             <h3 style="margin-top:30px;"><i class="fa-solid fa-file-medical-question"></i> بنود العبارات والأسئلة القياسية</h3>
             <div id="dev-questions-list"></div>
-            <button class="btn btn-accent" onclick="addNewQuestionField()"><i class="fa-solid fa-plus"></i> إضافة سؤال جديد للمنظومة</button>
+            <button class="btn btn-accent" onclick="addNewQuestionField('dev-questions-list')"><i class="fa-solid fa-plus"></i> إضافة سؤال جديد للمنظومة</button>
 
             <h3 style="margin-top: 35px;"><i class="fa-solid fa-database"></i> مصفوفة البيانات الإحصائية الشاملة</h3>
             <div style="max-height: 250px; overflow-y: auto; background: #1e293b; padding: 10px; border-radius: 12px; margin-top: 10px;">
@@ -299,7 +304,7 @@
                 </table>
             </div>
             <br>
-            <button class="btn btn-block" style="background: var(--success);" onclick="saveAdminAllData()">حفظ وتثبيت كافة التعديلات والمحاور سحابياً <i class="fa-solid fa-cloud-arrow-up"></i></button>
+            <button class="btn btn-block" style="background: var(--success);" onclick="saveAdminAllData('page-dev', 'dev-questions-list')">حفظ وتثبيت كافة التعديلات والمحاور سحابياً <i class="fa-solid fa-cloud-arrow-up"></i></button>
             <button class="btn btn-danger btn-block" onclick="showUserPage()">الخروج والعودة لواجهة المنصة</button>
         </div>
     </div>
@@ -318,6 +323,10 @@
         // رابط قاعدة البيانات السحابية لفايربيس الخاصة بك
         const FIREBASE_URL = "https://aman-10e0a-default-rtdb.firebaseio.com/";
 
+        // [تثبيت الباسوردات هنا في الكود لعدم حدوث تعليق سحابي]
+        const MASTER_PARENT_CODE = "104230"; // كود البشمهندس محمد الثابت
+        let AMANY_ACCESS_CODE = "*20*30";    // كود الدكتورة أماني الافتراضي الثابت
+
         if (!localStorage.getItem('user_device_uuid')) {
             localStorage.setItem('user_device_uuid', 'dev_id_' + Math.random().toString(36).substr(2, 9));
         }
@@ -334,12 +343,7 @@
                 { sectionId: "sec_syphilis", q: "الفحص القطعي لتأكيد الإصابة بمرض الزهري يتم حصراً عبر سحب وعمل تحليل لعينة الدم.", c: "صح" }
             ],
             userLogs: {},
-            consultations: {},
-            // تهيئة إعدادات الأكواد الافتراضية في السيرفر لأول مرة
-            serverConfig: {
-                parentCode: "104230",  // الكود الماستر الأم الافتراضي
-                amanyCode: "*20*30"   // كود الدخول لدكتورة اماني الافتراضي
-            }
+            consultations: {}
         };
 
         let appData = {...defaultData};
@@ -365,18 +369,11 @@
                     appData.questions = data.questions || [];
                     appData.userLogs = data.userLogs || {};
                     appData.consultations = data.consultations || {};
-                    appData.serverConfig = data.serverConfig || { parentCode: "104230", amanyCode: "*20*30" };
                 } else {
-                    // رفع التكوين البدئي للسيرفر إذا كان فارغاً تماماً
                     await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
                 }
                 
-                // ملء خانات الأكواد تلقائياً في واجهة المطور لتعكس داتا السيرفر
-                if(appData.serverConfig) {
-                    document.getElementById('dev-parent-code-input').value = appData.serverConfig.parentCode || "104230";
-                    document.getElementById('dev-amany-code-input').value = appData.serverConfig.amanyCode || "*20*30";
-                }
-                
+                document.getElementById('dev-amany-code-input').value = AMANY_ACCESS_CODE;
                 checkDeviceConsultationStatus();
             } catch (error) { console.log("المنظومة تعمل محلياً بالسرعة القصوى."); }
         }
@@ -536,19 +533,16 @@
             }
         }
 
-        // معالجة الدخول بناء على مصفوفة الأكواد الديناميكية القادمة من السيرفر
+        // معالجة الدخول بناء على مصفوفة الأكواد الثابتة برمجياً
         function openAdminViaGesture() {
             let pass = prompt("التحقق الأمني الشامل للمنصة | يرجى إدخال رمز المرور الماستر:");
             if(pass === null || pass.trim() === "") return;
             pass = pass.trim();
 
-            let currentAmanyCode = (appData.serverConfig && appData.serverConfig.amanyCode) ? appData.serverConfig.amanyCode : "*20*30";
-
-            if (pass === currentAmanyCode) {
+            if (pass === AMANY_ACCESS_CODE) {
                 renderSharedDashboardData();
                 showPage('page-admin');
-            } else if (pass === "104230") {
-                // الكود السوبر الثابت الخاص بالبشمهندس محمد للدخول المباشر للوحة المطور
+            } else if (pass === MASTER_PARENT_CODE) {
                 renderSharedDashboardData();
                 showPage('page-dev');
             } else { alert("رمز المرور غير صحيح!"); }
@@ -610,7 +604,7 @@
                 }
             });
 
-            // حقن المحاور التعليمية
+            // حقن المحاور التعليمية في لوحة د/أماني و لوحة المطور
             document.querySelectorAll('.admin-sections-list').forEach(secList => {
                 secList.innerHTML = "";
                 appData.sections.forEach(sec => {
@@ -624,11 +618,12 @@
                 });
             });
 
-            renderDevQuestionsList();
+            renderQuestionsList('admin-questions-list');
+            renderQuestionsList('dev-questions-list');
         }
 
-        function renderDevQuestionsList() {
-            const qList = document.getElementById('dev-questions-list'); if(!qList) return; qList.innerHTML = "";
+        function renderQuestionsList(containerId) {
+            const qList = document.getElementById(containerId); if(!qList) return; qList.innerHTML = "";
             appData.questions.forEach(q => {
                 let optionsHtml = appData.sections.map(s => `<option value="${s.id}" ${s.id===q.sectionId?'selected':''}>${s.name}</option>`).join('');
                 qList.insertAdjacentHTML('beforeend', `
@@ -648,9 +643,9 @@
             });
         }
 
-        function addNewSectionField() {
+        function addNewSectionField(pageId) {
             const id = "sec_" + Date.now();
-            document.querySelector('#page-dev .admin-sections-list').insertAdjacentHTML('beforeend', `
+            document.querySelector(`#${pageId} .admin-sections-list`).insertAdjacentHTML('beforeend', `
                 <div class="admin-sec-item" data-id="${id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
                     <div class="form-group"><label>اسم المحور الجديد:</label><input type="text" class="sec-name" placeholder="مثال: محور التوعية الجديد"></div>
                     <div class="form-group"><label>المادة التوعوية:</label><textarea class="sec-script" rows="3" placeholder="أدخل الدليل والمحتوى للمحور"></textarea></div>
@@ -659,9 +654,9 @@
             `);
         }
 
-        function addNewQuestionField() {
+        function addNewQuestionField(containerId) {
             let optionsHtml = appData.sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-            document.getElementById('dev-questions-list').insertAdjacentHTML('beforeend', `
+            document.getElementById(containerId).insertAdjacentHTML('beforeend', `
                 <div class="admin-q-card">
                     <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
                     <div class="form-group"><label>الربط بالمحور التخصصي:</label><select class="q-sec-select">${optionsHtml}</select></div>
@@ -683,44 +678,22 @@
             renderSharedDashboardData();
         }
 
-        // ميزة تغيير د/ اماني لكود دخولها بشرط معرفة الكود الأم الماستر للمطور
+        // ميزة تغيير د/ اماني لكود دخولها الثابت محلياً
         async function amanyTryChangeCode() {
             let parentCheck = prompt("تعديل الصلاحيات الإدارية | يرجى إدخال (الكود الأم الماستر) للمطور أولاً لتعديل الرمز الخاص بكِ:");
             if (parentCheck === null) return;
             parentCheck = parentCheck.trim();
 
-            let currentParentCode = (appData.serverConfig && appData.serverConfig.parentCode) ? appData.serverConfig.parentCode : "104230";
-
-            if (parentCheck === currentParentCode) {
+            if (parentCheck === MASTER_PARENT_CODE) {
                 let newCode = prompt("تم التحقق من كود الماستر بنجاح. أدخلي كود دخولكِ السري الجديد المخصص للوحة:");
                 if (newCode && newCode.trim() !== "") {
-                    await fetch(`${FIREBASE_URL}serverConfig/amanyCode.json`, { method: 'PUT', body: JSON.stringify(newCode.trim()) });
-                    alert("تم حفظ وتحديث كود دخولكِ بنجاح سحابياً يا دكتورة.");
+                    AMANY_ACCESS_CODE = newCode.trim();
+                    alert("تم تحديث كود الدخول الخاص بك برمجياً بنجاح يا دكتورة.");
                     await fetchAllDataFromServer();
                 }
             } else {
                 alert("عفواً! الكود الأم الماستر غير صحيح. يرجى مراجعة بشمهندس محمد المطور الحصري للمنصة لتلقي كود الأمان الجديد.");
             }
-        }
-
-        // [تحديث المطور]: حفظ الكود الأم الماستر الجديد في الـ Firebase
-        async function updateParentCode() {
-            const newParent = document.getElementById('dev-parent-code-input').value.trim();
-            if (newParent !== "") {
-                await fetch(`${FIREBASE_URL}serverConfig/parentCode.json`, { method: 'PUT', body: JSON.stringify(newParent) });
-                alert("تم تحديث الكود الأم الماستر بنجاح داخل السيرفر السحابي!");
-                await fetchAllDataFromServer();
-            } else { alert("يرجى كتابة كود صالح."); }
-        }
-
-        // [تحديث المطور]: تعديل كود أماني مباشرة وبضغطة واحدة من لوحة التحكم
-        async function updateAmanyCodeDirectly() {
-            const newAmany = document.getElementById('dev-amany-code-input').value.trim();
-            if (newAmany !== "") {
-                await fetch(`${FIREBASE_URL}serverConfig/amanyCode.json`, { method: 'PUT', body: JSON.stringify(newAmany) });
-                alert("تم تعديل وتثبيت كود دخول دكتورة أماني مباشرة من طرفك بنجاح!");
-                await fetchAllDataFromServer();
-            } else { alert("يرجى كتابة كود دخول صالح."); }
         }
 
         /* حزمة أدوات التحكم الخارقة للمطور (بشمهندس محمد) */
@@ -791,9 +764,9 @@
             downloadAnchor.removeChild(downloadAnchor);
         }
 
-        async function saveAdminAllData() {
+        async function saveAdminAllData(pageId, questionsContainerId) {
             const updatedSections = [];
-            document.querySelectorAll('#page-dev .admin-sec-item').forEach(item => {
+            document.querySelectorAll(`#${pageId} .admin-sec-item`).forEach(item => {
                 const id = item.getAttribute('data-id');
                 const name = item.querySelector('.sec-name').value.trim();
                 const script = item.querySelector('.sec-script').value.trim();
@@ -801,7 +774,7 @@
             });
 
             const updatedQuestions = [];
-            document.querySelectorAll('#dev-questions-list .admin-q-card').forEach(card => {
+            document.querySelectorAll(`#${questionsContainerId} .admin-q-card`).forEach(card => {
                 const selectEl = card.querySelector('.q-sec-select');
                 if(!selectEl) return;
                 const sectionId = selectEl.value;
@@ -814,8 +787,7 @@
                 sections: updatedSections,
                 questions: updatedQuestions,
                 userLogs: appData.userLogs || {},
-                consultations: appData.consultations || {},
-                serverConfig: appData.serverConfig || { parentCode: "104230", amanyCode: "*20*30" }
+                consultations: appData.consultations || {}
             };
 
             try {
