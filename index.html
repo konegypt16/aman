@@ -102,16 +102,15 @@
         .platform-footer { position: fixed; bottom: 15px; right: 20px; font-size: 14px; color: var(--muted); font-weight: 600; z-index: 90; direction: ltr; }
         .platform-footer span { color: var(--accent); }
 
-        /* 🔒 كود الحماية والتمويه السري الجديد لمنع التحديد والنسخ والوميض الأزرق */
         .secret-trigger { 
             cursor: default; 
             color: inherit; 
             text-decoration: none;
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+ */
-            user-select: none; /* المعيار القياسي لمنع التحديد والنسخ */
-            -webkit-tap-highlight-color: transparent; /* إلغاء الوميض الأزرق تماماً على الموبايل عند الضغط */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
             outline: none;
         }
 
@@ -121,7 +120,6 @@
 </head>
 <body>
 
-    <!-- شاشة الصيانة المصلحة والمحمية -->
     <div id="maintenance-screen">
         <i class="fa-solid fa-screwdriver-wrench"></i>
         <h1>منصة <span class="secret-trigger">أمان</span> تحت التحديث الآن</h1>
@@ -133,7 +131,6 @@
             <div class="progress-bar" id="global-progress-bar"></div>
         </div>
 
-        <!-- 1. صفحة تسجيل الدخول ومتابعة الاستشارات -->
         <div class="page active" id="page-login">
             <h2 style="text-align: center;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> حزمة <span class="secret-trigger">أمان</span> التوعوية التفاعلية الشاملة</h2>
             <p style="text-align: center; margin-bottom: 25px;">منصة رقمية متكاملة للقياس المعرفي والاستشارات السرية الفورية ضمن إطار دراسة بحثية أكاديمية.</p>
@@ -168,7 +165,6 @@
             </div>
         </div>
 
-        <!-- باقي الصفحات كما هي تماماً دون تعديل في تصميمها الإجرائي البارع -->
         <div class="page" id="page-sections">
             <h2>أهلاً بك: <span id="welcome-name" style="color: var(--primary);"></span></h2>
             <p>يرجى اختيار أحد المحاور لبدء فحص الوعي القبلي والبعدي المتكامل:</p>
@@ -212,7 +208,6 @@
             <button class="btn btn-block" onclick="showSectionsPage()"><i class="fa-solid fa-arrow-rotate-right"></i> العودة لقائمة المسارات البحثية والمتابعة</button>
         </div>
 
-        <!-- لوحة تحكم د/ أماني الأكاديمية -->
         <div class="page" id="page-admin">
             <h2><i class="fa-solid fa-chart-line" style="color:var(--primary)"></i> أهلاً بكِ يا دكتورة أماني في لوحة الإدارة الأكاديمية</h2>
             <p style="margin-bottom: 25px;">مصفوفة القياس الإحصائي المخصصة لمتابعة الاستجابات وعينة البحث العلمي الحالية.</p>
@@ -253,7 +248,6 @@
             <button class="btn btn-danger btn-block" onclick="showUserPage()">الخروج والعودة لواجهة المنصة</button>
         </div>
 
-        <!-- لوحة تحكم المطور الحصرية الخارقة للبشمهندس محمد -->
         <div class="page" id="page-dev">
             <div class="server-status">
                 <div class="server-pulse"></div>
@@ -314,7 +308,7 @@
             <div class="admin-consultations-container" style="background:#0b0f19; padding:20px; border-radius:16px; margin-bottom:30px;"></div>
 
             <h3><i class="fa-solid fa-folder-plus"></i> إدارة المحاور والأسئلة (تعديل الهيكل السحابي)</h3>
-            <div class="admin-sections-list" style="background: #0b0f19; padding: 25px; border-radius: 16px; margin-bottom: 25px;"></div>
+            <div class="admin-sections-list" id="dev-sections-list" style="background: #0b0f19; padding: 25px; border-radius: 16px; margin-bottom: 25px;"></div>
             <button class="btn btn-accent" onclick="addNewSectionField()"><i class="fa-solid fa-plus"></i> إضافة محور/سكشن جديد</button>
 
             <h3 style="margin-top:30px;"><i class="fa-solid fa-file-medical-question"></i> بنود العبارات والأسئلة القياسية</h3>
@@ -368,10 +362,8 @@
         let secretClickCount = 0, lastClickTime = 0;
         let isDevActive = false;
 
-        // 🛡️ نظام الاستماع الحديث والمخفي للضغطات المتتالية دون أي وميض أو كاشف نسخ
         function initSecretTriggers() {
             document.querySelectorAll('.secret-trigger').forEach(el => {
-                // إزالة أي مستمع قديم لمنع التكرار
                 el.removeEventListener('click', handleSecretClickEvent);
                 el.addEventListener('click', handleSecretClickEvent);
             });
@@ -405,7 +397,7 @@
                 }
                 
                 handleLockMechanism();
-                initSecretTriggers(); // إعادة ربط العناصر بعد التحديث الديناميكي
+                initSecretTriggers();
 
                 if(appData.serverConfig) {
                     const devCodeInput = document.getElementById('dev-my-own-code');
@@ -431,7 +423,7 @@
             } catch (error) { console.log("خطأ في الاتصال بالخادم."); }
         }
         
-        setInterval(fetchAllDataFromServer, 4000);
+        setInterval(fetchAllDataFromServer, 5000);
         window.onload = () => {
             fetchAllDataFromServer();
         };
@@ -463,7 +455,7 @@
             pBar.style.display = (id === 'page-quiz' || id === 'page-awareness' || id === 'page-result') ? 'block' : 'none';
             isDevActive = (id === 'page-dev' || id === 'page-admin');
             handleLockMechanism();
-            setTimeout(initSecretTriggers, 100); // للتأكد من حماية العناصر في الصفحة النشطة
+            setTimeout(initSecretTriggers, 100);
         }
 
         function updateProgressBar(percent) { document.getElementById('global-progress-bar').style.width = percent + "%"; }
@@ -680,21 +672,36 @@
                 }
             });
 
-            document.querySelectorAll('.admin-sections-list').forEach(secList => {
-                secList.innerHTML = "";
-                appData.sections.forEach(sec => {
-                    secList.insertAdjacentHTML('beforeend', `
-                        <div class="admin-sec-item" data-id="${sec.id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
-                            <div class="form-group"><label>اسم المحور الأكاديمي:</label><input type="text" class="sec-name" value="${sec.name}"></div>
-                            <div class="form-group"><label>المادة التوعوية المرفقة للمحور:</label><textarea class="sec-script" rows="3">${sec.script}</textarea></div>
-                            <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف المحور بالكامل</button>
-                        </div>
-                    `);
-                });
-            });
+            // رندرة المحاور لكل لوحة بشكل مستقل عبر الـ ID
+            const amanySecList = document.getElementById('amany-sections-list');
+            const devSecList = document.getElementById('dev-sections-list');
+            
+            if(amanySecList) {
+                amanySecList.innerHTML = "";
+                appData.sections.forEach(sec => { amanySecList.appendChild(createSectionDOM(sec)); });
+            }
+            if(devSecList) {
+                devSecList.innerHTML = "";
+                appData.sections.forEach(sec => { devSecList.appendChild(createSectionDOM(sec)); });
+            }
 
             renderDevQuestionsList();
-            setTimeout(initSecretTriggers, 100); // حماية العناصر بعد رندرة البيانات الإضافية
+            setTimeout(initSecretTriggers, 100);
+        }
+
+        function createSectionDOM(sec) {
+            const div = document.createElement('div');
+            div.className = "admin-sec-item";
+            div.setAttribute('data-id', sec.id);
+            div.style.marginBottom = "20px";
+            div.style.borderBottom = "1px dashed rgba(255,255,255,0.1)";
+            div.style.paddingBottom = "15px";
+            div.innerHTML = `
+                <div class="form-group"><label>اسم المحور الأكاديمي:</label><input type="text" class="sec-name" value="${sec.name}"></div>
+                <div class="form-group"><label>المادة التوعوية المرفقة للمحور:</label><textarea class="sec-script" rows="3">${sec.script}</textarea></div>
+                <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف المحور بالكامل</button>
+            `;
+            return div;
         }
 
         function renderDevQuestionsList() {
@@ -725,36 +732,34 @@
 
         function addNewSectionField() {
             const id = "sec_" + Date.now();
-            document.querySelectorAll('.admin-sections-list').forEach(list => {
-                list.insertAdjacentHTML('beforeend', `
-                    <div class="admin-sec-item" data-id="${id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
-                        <div class="form-group"><label>اسم المحور الجديد:</label><input type="text" class="sec-name" placeholder="مثال: محور التوعية الجديد"></div>
-                        <div class="form-group"><label>المادة التوعوية:</label><textarea class="sec-script" rows="3" placeholder="أدخل الدليل والمحتوى للمحور"></textarea></div>
-                        <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف</button>
-                    </div>
-                `);
-            });
+            const targetContainer = document.querySelector('.page.active .admin-sections-list');
+            if(!targetContainer) return;
+            
+            targetContainer.insertAdjacentHTML('beforeend', `
+                <div class="admin-sec-item" data-id="${id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
+                    <div class="form-group"><label>اسم المحور الجديد:</label><input type="text" class="sec-name" placeholder="مثال: محور التوعية الجديد"></div>
+                    <div class="form-group"><label>المادة التوعوية:</label><textarea class="sec-script" rows="3" placeholder="أدخل الدليل والمحتوى للمحور"></textarea></div>
+                    <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف</button>
+                </div>
+            `);
         }
 
         function addNewQuestionField() {
+            const targetContainer = document.querySelector('.page.active [id$="questions-list"]');
+            if(!targetContainer) return;
+            
             let optionsHtml = appData.sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-            const containers = ['dev-questions-list', 'amany-questions-list'];
-            containers.forEach(cId => {
-                const el = document.getElementById(cId);
-                if(el) {
-                    el.insertAdjacentHTML('beforeend', `
-                        <div class="admin-q-card">
-                            <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
-                            <div class="form-group"><label>الربط بالمحور التخصصي:</label><select class="q-sec-select">${optionsHtml}</select></div>
-                            <div class="form-group"><label>العبارة/السؤال:</label><input type="text" class="q-text" placeholder="اكتب عبارة الاختبار"></div>
-                            <div class="form-group">
-                                <label>الاستجابة الصحيحة:</label>
-                                <select class="q-correct"><option value="صح">صح</option><option value="غلط">غلط</option></select>
-                            </div>
-                        </div>
-                    `);
-                }
-            });
+            targetContainer.insertAdjacentHTML('beforeend', `
+                <div class="admin-q-card">
+                    <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
+                    <div class="form-group"><label>الربط بالمحور التخصصي:</label><select class="q-sec-select">${optionsHtml}</select></div>
+                    <div class="form-group"><label>العبارة/السؤال:</label><input type="text" class="q-text" placeholder="اكتب عبارة الاختبار"></div>
+                    <div class="form-group">
+                        <label>الاستجابة الصحيحة:</label>
+                        <select class="q-correct"><option value="صح">صح</option><option value="غلط">غلط</option></select>
+                    </div>
+                </div>
+            `);
         }
 
         async function submitAdminAnswerToConsultation(key) {
@@ -767,7 +772,7 @@
         }
 
         async function amanyTryChangeCode() {
-            let parentCheck = prompt("تعديل الصلاحيات الإدارية | يرجى إدخال (الكود الأم الماستر) لتعديل الرمز الخاص بكِ:");
+            let parentCheck = prompt("تعديل الصلاحيات الإدارية | يرجى إدخل (الكود الأم الماستر) لتعديل الرمز الخاص بكِ:");
             if (parentCheck === null) return;
             parentCheck = parentCheck.trim();
 
@@ -780,9 +785,7 @@
                     alert("تم حفظ وتحديث كود دخولكِ بنجاح سحابياً يا دكتورة.");
                     await fetchAllDataFromServer();
                 }
-            } else {
-                alert("عفواً! الكود الأم الماستر غير صحيح.");
-            }
+            } else { alert("عفواً! الكود الأم الماستر غير صحيح."); }
         }
 
         async function updateDevOwnCode() {
@@ -831,90 +834,4 @@
                 };
                 await fetch(`${FIREBASE_URL}userLogs.json`, { method: 'POST', body: JSON.stringify(mockEntry) });
             }
-            alert("تم توليد 10 عينات وهمية بنجاح إحصائي ممتاز للـ SPSS!");
-            await fetchAllDataFromServer();
-            renderSharedDashboardData();
-        }
-
-        async function clearLogs(nodePath) {
-            if(confirm(`هل أنت متأكد من مسح كافة بيانات [${nodePath}] نهائياً؟`)) {
-                await fetch(`${FIREBASE_URL}${nodePath}.json`, { method: 'DELETE' });
-                location.reload();
-            }
-        }
-
-        async function resetToDefault() {
-            if(confirm("هل تريد تصفير الداتابيز بالكامل واستعادة التهيئة الافتراضية الأصلية للمنصة؟")) {
-                await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
-                location.reload();
-            }
-        }
-
-        function exportToCSV() {
-            const logs = Object.values(appData.userLogs || {});
-            if(logs.length === 0) return alert("لا توجد بيانات لتصديرها!");
-            let csvContent = "\uFEFF"; 
-            csvContent += "المشارك,التخصص/المستوى,المحور التعليمي,الاختبار القبلي,الاختبار البعدي,معدل النمو,التاريخ والوقت\n";
-            logs.forEach(u => { csvContent += `"${u.name}","${u.job}","${u.sectionName}","${u.preScore}","${u.postScore}","${u.growth}","${u.date}"\n`; });
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", `SPSS_Raw_Data_${Date.now()}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function exportToJSON() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 4));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `Aman_Platform_Backup_${Date.now()}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.removeChild(downloadAnchor);
-        }
-
-        async function saveAdminAllData() {
-            const updatedSections = [];
-            document.querySelectorAll('.page.active .admin-sec-item, .admin-sec-item').forEach(item => {
-                const id = item.getAttribute('data-id');
-                const nameInput = item.querySelector('.sec-name');
-                const scriptInput = item.querySelector('.sec-script');
-                if(nameInput && scriptInput) {
-                    const name = nameInput.value.trim();
-                    const script = scriptInput.value.trim();
-                    if(name && script && !updatedSections.find(x => x.id === id)) updatedSections.push({ id, name, script });
-                }
-            });
-
-            const updatedQuestions = [];
-            document.querySelectorAll('.page.active .admin-q-card, .admin-q-card').forEach(card => {
-                const selectEl = card.querySelector('.q-sec-select');
-                const qInput = card.querySelector('.q-text');
-                const cSelect = card.querySelector('.q-correct');
-                if(selectEl && qInput && cSelect) {
-                    const sectionId = selectEl.value;
-                    const q = qInput.value.trim();
-                    const c = cSelect.value;
-                    if(sectionId && q && c) updatedQuestions.push({ sectionId, q, c });
-                }
-            });
-
-            const payload = {
-                sections: updatedSections.length > 0 ? updatedSections : appData.sections,
-                questions: updatedQuestions.length > 0 ? updatedQuestions : appData.questions,
-                userLogs: appData.userLogs || {},
-                consultations: appData.consultations || {},
-                serverConfig: appData.serverConfig || { devCode: "104230", parentCode: "104230", amanyCode: "*20*30", isLocked: false }
-            };
-
-            try {
-                await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(payload) });
-                alert("تم تحديث وحفظ مصفوفة وهيكلية المنصة بالكامل بنجاح سحابي ممتاز!");
-                location.reload();
-            } catch(e) { alert("حدث خطأ أثناء الحفظ السحابي."); }
-        }
-    </script>
-</body>
-</html>
+            alert("تم توليد 10 عينات وهمية بنجاح إ
