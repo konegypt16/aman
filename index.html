@@ -361,6 +361,7 @@
         let currentUser = { name: "", job: "" }, selectedSectionId = "", isPostTest = false, currentQuestionIndex = 0, preCorrectCount = 0, postCorrectCount = 0, currentSectionQuestions = [];
         let secretClickCount = 0, lastClickTime = 0;
         let isDevActive = false;
+        let globalFetchInterval = null;
 
         function initSecretTriggers() {
             document.querySelectorAll('.secret-trigger').forEach(el => {
@@ -385,6 +386,10 @@
         }
 
         async function fetchAllDataFromServer() {
+            // تجنب تصفير المدخلات أثناء تعديل دكتورة أماني أو المطور للهيكل
+            if (isDevActive && (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA" || document.activeElement.tagName === "SELECT")) {
+                return;
+            }
             try {
                 const response = await fetch(`${FIREBASE_URL}.json`);
                 const data = await response.json();
@@ -398,6 +403,10 @@
                 
                 handleLockMechanism();
                 initSecretTriggers();
+
+                if (isDevActive) {
+                    renderSharedDashboardData();
+                }
 
                 if(appData.serverConfig) {
                     const devCodeInput = document.getElementById('dev-my-own-code');
@@ -423,7 +432,8 @@
             } catch (error) { console.log("خطأ في الاتصال بالخادم."); }
         }
         
-        setInterval(fetchAllDataFromServer, 5000);
+        globalFetchInterval = setInterval(fetchAllDataFromServer, 5000);
+        
         window.onload = () => {
             fetchAllDataFromServer();
         };
@@ -601,7 +611,6 @@
             if(confirm("هل تؤكد حذف هذه الاستشارة نهائياً؟")) {
                 await fetch(`${FIREBASE_URL}consultations/${key}.json`, { method: 'DELETE' });
                 await fetchAllDataFromServer();
-                renderSharedDashboardData();
             }
         }
 
@@ -641,6 +650,7 @@
             document.querySelectorAll('.stat-avg-growth').forEach(el => el.innerText = avgGrowth);
 
             document.querySelectorAll('.admin-users-logs').forEach(tableBody => {
+                if (tableBody.children.length === logs.length) return; // منع التدمير إذا لم يتغير العدد
                 tableBody.innerHTML = "";
                 logs.forEach(u => {
                     tableBody.insertAdjacentHTML('beforeend', `<tr><td>${u.name}</td><td>${u.job}</td><td style="font-size:12px;color:var(--muted)">${u.sectionName}</td><td style="color:var(--accent); font-weight:bold;">${u.preScore}</td><td style="color:var(--success); font-weight:bold;">${u.postScore}</td><td style="color:#38bdf8">${u.growth || '0%'}</td><td style="font-size:11px; color:var(--muted); direction:ltr;">${u.date || '-'}</td></tr>`);
@@ -648,8 +658,9 @@
             });
 
             document.querySelectorAll('.admin-consultations-container').forEach(consContainer => {
-                consContainer.innerHTML = "";
                 const consKeys = Object.keys(appData.consultations || {});
+                if (consContainer.children.length === consKeys.length && consKeys.length > 0) return;
+                consContainer.innerHTML = "";
                 if(consKeys.length === 0) {
                     consContainer.innerHTML = '<p style="text-align:center;color:var(--muted)">لا توجد استشارات واردة حالياً.</p>';
                 } else {
@@ -672,21 +683,18 @@
                 }
             });
 
-            // رندرة المحاور لكل لوحة بشكل مستقل عبر الـ ID
+            // رندرة القوائم فقط إذا كانت فارغة لمنع تصفير الكتابة أثناء إدخال الداتا
             const amanySecList = document.getElementById('amany-sections-list');
             const devSecList = document.getElementById('dev-sections-list');
             
-            if(amanySecList) {
-                amanySecList.innerHTML = "";
+            if(amanySecList && amanySecList.children.length === 0) {
                 appData.sections.forEach(sec => { amanySecList.appendChild(createSectionDOM(sec)); });
             }
-            if(devSecList) {
-                devSecList.innerHTML = "";
+            if(devSecList && devSecList.children.length === 0) {
                 appData.sections.forEach(sec => { devSecList.appendChild(createSectionDOM(sec)); });
             }
 
             renderDevQuestionsList();
-            setTimeout(initSecretTriggers, 100);
         }
 
         function createSectionDOM(sec) {
@@ -706,10 +714,8 @@
 
         function renderDevQuestionsList() {
             const qContainers = [document.getElementById('dev-questions-list'), document.getElementById('amany-questions-list')];
-            
             qContainers.forEach(qList => {
-                if(!qList) return; 
-                qList.innerHTML = "";
+                if(!qList || qList.children.length > 0) return; 
                 appData.questions.forEach(q => {
                     let optionsHtml = appData.sections.map(s => `<option value="${s.id}" ${s.id===q.sectionId?'selected':''}>${s.name}</option>`).join('');
                     qList.insertAdjacentHTML('beforeend', `
@@ -762,13 +768,53 @@
             `);
         }
 
+        // دالة تجميع وحفظ البيانات السحابية بالكامل وإرسالها لـ Firebase
+        async function saveAdminAllData() {
+            const activePage = document.querySelector('.page.active').id;
+            let secListContainer = (activePage === 'page-dev') ? document.getElementById('dev-sections-list') : document.getElementById('amany-sections-list');
+            let qListContainer = (activePage === 'page-dev') ? document.getElementById('dev-questions-list') : document.getElementById('amany-questions-list');
+
+            let newSections = [];
+            secListContainer.querySelectorAll('.admin-sec-item').forEach(item => {
+                newSections.push({
+                    id: item.getAttribute('data-id'),
+                    name: item.querySelector('.sec-name').value.trim(),
+                    script: item.querySelector('.sec-script').value.trim()
+                });
+            });
+
+            let newQuestions = [];
+            qListContainer.querySelectorAll('.admin-q-card').forEach(card => {
+                newQuestions.push({
+                    sectionId: card.querySelector('.q-sec-select').value,
+                    q: card.querySelector('.q-text').value.trim(),
+                    c: card.querySelector('.q-correct').value
+                });
+            });
+
+            try {
+                await fetch(`${FIREBASE_URL}sections.json`, { method: 'PUT', body: JSON.stringify(newSections) });
+                await fetch(`${FIREBASE_URL}questions.json`, { method: 'PUT', body: JSON.stringify(newQuestions) });
+                alert("تم حفظ وتثبيت كافة التعديلات سحابياً بنجاح! ✨");
+                
+                // تفريغ يدوي لإعادة تحميل البنية الجديدة بشكل نظيف من السيرفر
+                if(document.getElementById('amany-sections-list')) document.getElementById('amany-sections-list').innerHTML = "";
+                if(document.getElementById('dev-sections-list')) document.getElementById('dev-sections-list').innerHTML = "";
+                if(document.getElementById('amany-questions-list')) document.getElementById('amany-questions-list').innerHTML = "";
+                if(document.getElementById('dev-questions-list')) document.getElementById('dev-questions-list').innerHTML = "";
+                
+                await fetchAllDataFromServer();
+            } catch (err) {
+                alert("حدث خطأ أثناء محاولة الحفظ السحابي!");
+            }
+        }
+
         async function submitAdminAnswerToConsultation(key) {
             const ansText = document.getElementById(`ans-input-${key}`).value.trim();
             if(!ansText) return alert("يرجى صياغة رد المختص أولاً!");
             await fetch(`${FIREBASE_URL}consultations/${key}/answer.json`, { method: 'PUT', body: JSON.stringify(ansText) });
             alert("تم إرسال وتثبيت الرد لجهاز السائل بنجاح!");
             await fetchAllDataFromServer();
-            renderSharedDashboardData();
         }
 
         async function amanyTryChangeCode() {
@@ -815,11 +861,56 @@
             } else { alert("يرجى كتابة كود دخول صالح."); }
         }
 
+        async function clearLogs(target) {
+            if (confirm("هل أنت متأكد من تصفير هذا السجل نهائياً؟")) {
+                await fetch(`${FIREBASE_URL}${target}.json`, { method: 'DELETE' });
+                alert("تم مسح السجل المختار.");
+                await fetchAllDataFromServer();
+            }
+        }
+
+        async function resetToDefault() {
+            if (confirm("تحذير خطر! سيتم تهيئة النظام بالكامل وحذف كل الداتا الحالية! هل أنت متأكد؟")) {
+                await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
+                alert("تمت إعادة تهيئة النظام الافتراضي الأول بنجاح.");
+                location.reload();
+            }
+        }
+
+        function exportToJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 4));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `Aman_Platform_Backup_${Date.now()}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function exportToCSV() {
+            const logs = Object.values(appData.userLogs || {});
+            if(logs.length === 0) return alert("لا توجد استجابات مسجلة لتصديرها حالياً.");
+            let csvContent = "\uFEFFالمشارك,التخصص,المسار العلمي,النتيجة القبلية,النتيجة البعدية,معدل النمو,التاريخ والوقت\n";
+            logs.forEach(u => {
+                csvContent += `"${u.name}","${u.job}","${u.sectionName}","${u.preScore}","${u.postScore}","${u.growth}","${u.date}"\n`;
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Aman_SPSS_Matrix_${Date.now()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }
+
         async function generateMockData() {
             const names = ["أحمد محمود علي", "سارة محمد أحمد", "كود بحثي 405", "مشارك مجهول 22", "مصطفى السيد حسين", "نور الهدى عبده", "هاني شاكر حسن", "عبد الرحمن فوزي", "رنا جلال كمال", "مريم رأفت مسعود"];
             const jobs = ["طالب ثانوي فني", "ممارس عام", "فني مختبر", "طالب أكاديمي", "مشارك عينة فنية"];
             const preScores = ["10%", "20%", "30%", "40%", "50%", "0%"];
             const postScores = ["80%", "90%", "100%", "100%", "90%"];
+
+            if(appData.sections.length === 0) return alert("يرجى إضافة محور واحد على الأقل قبل توليد البيانات!");
 
             for (let i = 0; i < 10; i++) {
                 let pre = preScores[Math.floor(Math.random() * preScores.length)];
@@ -834,4 +925,9 @@
                 };
                 await fetch(`${FIREBASE_URL}userLogs.json`, { method: 'POST', body: JSON.stringify(mockEntry) });
             }
-            alert("تم توليد 10 عينات وهمية بنجاح إ
+            alert("تم توليد 10 عينات وهمية بنجاح إحصائي!");
+            await fetchAllDataFromServer();
+        }
+    </script>
+</body>
+</html>
