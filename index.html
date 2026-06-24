@@ -8,7 +8,6 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-
     <meta name="robots" content="noindex, nofollow">
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -32,10 +31,16 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; position: relative; padding-bottom: 80px; transition: background 0.3s ease; }
+        body { background-color: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; position: relative; padding-bottom: 80px; }
         
         .container { background: var(--card); border-radius: 24px; width: 100%; max-width: 950px; padding: 40px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
         
+        /* شاشة الصيانة والتحديث الفورية */
+        #maintenance-screen { display: none; position: fixed; top:0; left:0; width:100vw; height:100vh; background: var(--bg); z-index: 999999; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; }
+        #maintenance-screen i { font-size: 70px; color: var(--accent); margin-bottom: 25px; animation: pulse 2s infinite; }
+        #maintenance-screen h1 { font-size: 28px; margin-bottom: 15px; color: var(--text); }
+        #maintenance-screen p { font-size: 16px; color: var(--muted); }
+
         .progress-container { width: 100%; background: #24324d; height: 8px; border-radius: 10px; margin-bottom: 30px; display: none; overflow: hidden; }
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--success)); width: 0%; transition: width 0.4s ease; }
 
@@ -64,7 +69,6 @@
         
         .awareness-content { background: rgba(13, 148, 136, 0.08); border-right: 4px solid var(--primary); padding: 25px; border-radius: 12px; margin: 25px 0; line-height: 1.9; white-space: pre-line; font-size: 17px; }
         
-        .academic-notice { background: rgba(245, 158, 11, 0.04); border: 1px dashed rgba(245, 158, 11, 0.15); padding: 15px; border-radius: 12px; margin-top: 20px; font-size: 13px; text-align: center; color: var(--muted); }
         .medical-disclaimer { background: rgba(239, 64, 64, 0.04); border: 1px solid rgba(239, 64, 64, 0.15); padding: 15px; border-radius: 12px; margin-top: 15px; font-size: 13px; text-align: justify; color: #fca5a5; line-height: 1.6; }
         .sources-tag { font-size: 12px; color: var(--primary); display: block; margin-top: 10px; font-weight: bold; }
         
@@ -92,7 +96,6 @@
         .users-table th, .users-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .users-table th { background: #0b0f19; color: var(--accent); }
 
-        /* ستايلات حصرية لواجهة المطور */
         .dev-badge { background: #38bdf8; color: #000; padding: 4px 12px; font-size: 12px; font-weight: bold; border-radius: 6px; margin-right: 10px; display: inline-block; vertical-align: middle; }
         .server-status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--success); background: rgba(16, 185, 129, 0.1); padding: 5px 12px; border-radius: 20px; float: left; }
         .server-pulse { width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse 1.5s infinite; }
@@ -108,11 +111,19 @@
 </head>
 <body>
 
+    <!-- واجهة وضع الانتظار والتحديث المباشر للمستخدمين -->
+    <div id="maintenance-screen">
+        <i class="fa-solid fa-screwdriver-wrench"></i>
+        <h1>برجاء الانتظار</h1>
+        <p>يتم تحديث المنصة وتحسين الأنظمة الآن.. سنعود لخدمتكم خلال لحظات وجيزة.</p>
+    </div>
+
     <div class="container">
         <div class="progress-container" id="global-progress">
             <div class="progress-bar" id="global-progress-bar"></div>
         </div>
 
+        <!-- 1. صفحة تسجيل الدخول ومتابعة الاستشارات -->
         <div class="page active" id="page-login">
             <h2 style="text-align: center;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> حزمة <span id="secret-click-zone" class="secret-trigger" style="color: var(--primary);">أمان</span> التوعوية التفاعلية الشاملة</h2>
             <p style="text-align: center; margin-bottom: 25px;">منصة رقمية متكاملة للقياس المعرفي والاستشارات السرية الفورية ضمن إطار دراسة بحثية أكاديمية.</p>
@@ -131,7 +142,7 @@
 
             <div style="margin-top: 35px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px;">
                 <h3><i class="fa-solid fa-user-shield" style="color: var(--accent);"></i> صندوق الاستشارات السري المباشر مع المختص</h3>
-                <p style="font-size: 14px;">اطرح استفسارك بكل سرية بالأسفل. بمجرد عودتك لفتح الموقع من نفس الجهاز ستجد إجابة المختص في انتظارك تلقائياً وبشكل معزول تماماً عن باقي الزوار.</p>
+                <p style="font-size: 14px;">اطرح استفسارك بكل سرية بالأسفل. بمجرد عودتك لفتح الموقع من نفس الجهاز ستجد إجابة المختص في انتظارك تلقائياً.</p>
                 <div id="user-consultation-status"></div>
                 
                 <form id="ask-consultation-form" onsubmit="submitUserConsultation(event)">
@@ -145,12 +156,9 @@
                     <strong>تنويه:</strong> هذه الخدمة مخصصة للإجابة عن الاستفسارات التثقيفية المتعلقة بالصحة الإنجابية والأمراض المنقولة جنسيًا، ولا تُستخدم للتشخيص أو وصف العلاج.
                 </div>
             </div>
-
-            <div class="academic-notice">
-                <i class="fa-solid fa-user-lock"></i> <strong>معايير الأمان الأكاديمي:</strong> جميع البيانات والنتائج مشفرة ومخصصة فقط لنتائج البحث العلمي ومحمية وفق أخلاقيات التطوير البحثي.
-            </div>
         </div>
 
+        <!-- 2. شاشة تصفح محاور القياس المعرفي -->
         <div class="page" id="page-sections">
             <h2>أهلاً بك: <span id="welcome-name" style="color: var(--primary);"></span></h2>
             <p>يرجى اختيار أحد المحاور لبدء فحص الوعي القبلي والبعدي المتكامل:</p>
@@ -158,6 +166,7 @@
             <button class="btn btn-danger" onclick="location.reload()" style="margin-top: 30px;"><i class="fa-solid fa-arrow-right"></i> تسجيل الخروج/العودة للرئيسية</button>
         </div>
 
+        <!-- 3. صفحة مصفوفة أسئلة القياس التفاعلي -->
         <div class="page" id="page-quiz">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h3 id="quiz-type-title" style="color: var(--accent); margin: 0;">أداة القياس</h3>
@@ -169,6 +178,7 @@
             </div>
         </div>
 
+        <!-- 4. صفحة عرض المادة العلمية التمكينية -->
         <div class="page" id="page-awareness">
             <h2><i class="fa-solid fa-book-medical" style="color:var(--primary)"></i> الدليل الوقائي والتوعوي المعتمد</h2>
             <p>يرجى قراءة المادة التوعوية التالية بتمعن لتصحيح المفاهيم قبل اختبار قياس الاستفادة البعدي:</p>
@@ -177,9 +187,9 @@
             <button class="btn btn-block" onclick="startPostQuiz()">الانتقال إلى الاختبار البعدي لقياس الأثر المعرفي <i class="fa-solid fa-arrow-left"></i></button>
         </div>
 
+        <!-- 5. صفحة عرض كارت التمكين والنتائج الإحصائية الفردية -->
         <div class="page" id="page-result">
             <h2 style="text-align: center;"><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> اكتمل المحور البحثي بنجاح</h2>
-            
             <div class="badge-wrapper">
                 <div class="digital-badge">
                     <div class="badge-icon"><i class="fa-solid fa-graduation-cap"></i></div>
@@ -192,10 +202,10 @@
                     </div>
                 </div>
             </div>
-            
             <button class="btn btn-block" onclick="showSectionsPage()"><i class="fa-solid fa-arrow-rotate-right"></i> العودة لقائمة المسارات البحثية والمتابعة</button>
         </div>
 
+        <!-- 6. لوحة تحكم د/ أماني الأكاديمية -->
         <div class="page" id="page-admin">
             <h2><i class="fa-solid fa-chart-line" style="color:var(--primary)"></i> أهلاً بكِ يا دكتورة أماني في لوحة الإدارة الأكاديمية</h2>
             <p style="margin-bottom: 25px;">مصفوفة القياس الإحصائي المخصصة لمتابعة الاستجابات وعينة البحث العلمي الحالية.</p>
@@ -209,18 +219,13 @@
 
             <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05);">
                 <h4><i class="fa-solid fa-key" style="color:var(--accent);"></i> إدارة الأمان السري للوحة</h4>
-                <p style="font-size:13px; margin-bottom:10px;">يمكنكِ تعديل الرمز السري الخاص بالدخول إلى لوحتك الأكاديمية من هنا بشرط إدخال الكود الماستر الأم.</p>
+                <p style="font-size:13px; margin-bottom:10px;">يمكنكِ تعديل الرمز السري الخاص بالدخول إلى لوحتك الأكاديمية من هنا بشرط إدخال الكود الماستر الأم المعطى من المطور.</p>
                 <button class="btn btn-accent" style="margin:0; padding:8px 20px; font-size:13px;" onclick="amanyTryChangeCode()">تعديل كود الدخول الخاص بي <i class="fa-solid fa-lock-open"></i></button>
             </div>
 
-            <h3 style="color: var(--accent);"><i class="fa-solid fa-envelope-open-text"></i> الاستشارات الواردة من عينة البحث للرد</h3>
-            <div class="admin-consultations-container" style="background:#0b0f19; padding:20px; border-radius:16px; margin-bottom:30px;">
-                <p style="text-align:center; color:var(--muted)">لا توجد استشارات معلقة حالياً.</p>
-            </div>
+            <h3 style="color: var(--accent);"><i class="fa-solid fa-envelope-open-text"></i> الاستشارات الواردة للرد</h3>
+            <div class="admin-consultations-container" style="background:#0b0f19; padding:20px; border-radius:16px; margin-bottom:30px;"></div>
 
-            <h3><i class="fa-solid fa-folder-open"></i> محاور المسارات التعليمية الحالية</h3>
-            <div class="admin-sections-list" style="background: #0b0f19; padding: 25px; border-radius: 16px; margin-bottom: 25px;"></div>
-            
             <h3 style="margin-top: 35px;"><i class="fa-solid fa-database"></i> جدول البيانات الإحصائية الخام (Raw Data Matrix)</h3>
             <div style="max-height: 300px; overflow-y: auto; background: #1e293b; padding: 10px; border-radius: 12px; margin-top: 10px;">
                 <table class="users-table">
@@ -232,43 +237,56 @@
             <button class="btn btn-danger btn-block" onclick="showUserPage()">الخروج والعودة لواجهة المنصة</button>
         </div>
 
+        <!-- 7. لوحة تحكم المطور الحصرية الخارقة للبشمهندس محمد -->
         <div class="page" id="page-dev">
             <div class="server-status">
                 <div class="server-pulse"></div>
                 <span>Firebase Connected Online</span>
             </div>
             <h2><i class="fa-solid fa-terminal" style="color:#38bdf8"></i> لوحة تحكم المطور الخارقة <span class="dev-badge">Super Admin</span></h2>
-            <p style="margin-bottom: 25px;">أهلاً بك يا بشمهندس محمد. لديك الصلاحيات المطلقة لإدارة السيرفر، الصيانة، وتغيير الأكواد بالكامل.</p>
+            <p style="margin-bottom: 25px;">أهلاً بك يا بشمهندس محمد. لديك التحكم الكامل والمطلق بملفات الموقع ومسارات البيانات السحابية.</p>
 
-            <div class="dev-box" style="background: rgba(245, 158, 11, 0.03); border-color: rgba(245, 158, 11, 0.25);">
-                <h3 style="color: var(--accent);"><i class="fa-solid fa-shield-halved"></i> 🎛️ لوحة إدارة الأكواد والخلية السحابية الماستر</h3>
-                <p style="font-size:13px; margin-bottom: 15px;">بصفتك المطور، يمكنك التحكم بالكود الأم وتحديث كود دكتورة أماني مباشرة من هنا وسينعكس فوراً سحابياً.</p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <!-- 🚨 الميزة الجديدة المضافة: زر القفل السحابي الفوري ووضع الانتظار -->
+            <div class="dev-box" style="border-color: var(--danger); background: rgba(239, 68, 68, 0.02);">
+                <h3 style="color: var(--danger);"><i class="fa-solid fa-power-off"></i> زر القفل والتحكم في حالة الموقع (Kill Switch)</h3>
+                <p style="font-size: 13px; margin-bottom: 15px;">بضغطة واحدة، يمكنك حظر الزوار وإظهار شاشة (برجاء الانتظار يتم التحديث الآن) فوراً لحين انتهائك.</p>
+                <button id="dev-toggle-lock-btn" class="btn btn-danger" onclick="togglePlatformLock()">جاري فحص حالة السيرفر...</button>
+            </div>
+
+            <!-- نظام المطابقة والأكواد الثلاثية المعزولة -->
+            <div class="dev-box" style="background: rgba(56, 189, 248, 0.03); border-color: rgba(56, 189, 248, 0.25);">
+                <h3 style="color: #38bdf8;"><i class="fa-solid fa-shield-halved"></i> نظام التحكم والمطابقة الكلية بالأكواد</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
                     <div class="form-group">
-                        <label>الكود الأم الماستر الحالي (Parent Key):</label>
-                        <input type="text" id="dev-parent-code-input" style="border-color: rgba(245,158,11,0.3);">
-                        <button class="btn btn-accent" style="padding: 6px 15px; font-size:12px; margin-top:10px;" onclick="updateParentCode()">تحديث الكود الأم الماستر <i class="fa-solid fa-square-check"></i></button>
+                        <label>كود دخولك المطور:</label>
+                        <input type="text" id="dev-my-own-code" style="border-color: rgba(56,189,248,0.4);">
+                        <button class="btn" style="background:#38bdf8; color:#000; padding: 6px 12px; font-size:12px; margin-top:10px;" onclick="updateDevOwnCode()">تحديث كود دخولي <i class="fa-solid fa-key"></i></button>
                     </div>
                     <div class="form-group">
-                        <label>كود دخول دكتورة أماني المباشر (Amany Code):</label>
-                        <input type="text" id="dev-amany-code-input" style="border-color: rgba(13,148,136,0.3);">
-                        <button class="btn" style="padding: 6px 15px; font-size:12px; margin-top:10px;" onclick="updateAmanyCodeDirectly()">تعديل كود أماني فوراً <i class="fa-solid fa-user-lock"></i></button>
+                        <label>الكود الأم الماستر (لتحكم أماني):</label>
+                        <input type="text" id="dev-parent-code-input" style="border-color: rgba(245,158,11,0.4);">
+                        <button class="btn btn-accent" style="padding: 6px 12px; font-size:12px; margin-top:10px;" onclick="updateParentCode()">تحديث الماستر الأم <i class="fa-solid fa-lock"></i></button>
+                    </div>
+                    <div class="form-group">
+                        <label>كود دخول د/ أماني المباشر:</label>
+                        <input type="text" id="dev-amany-code-input" style="border-color: rgba(13,148,136,0.4);">
+                        <button class="btn" style="padding: 6px 12px; font-size:12px; margin-top:10px;" onclick="updateAmanyCodeDirectly()">تعديل كود أماني فوراً <i class="fa-solid fa-user-lock"></i></button>
                     </div>
                 </div>
             </div>
 
+            <!-- أدوات المحاكاة وتوليد الداتا الوهمية -->
             <div class="dev-box">
                 <h3 style="color:#38bdf8;"><i class="fa-solid fa-flask"></i> نظام محاكاة واختبار البيانات (System Simulator)</h3>
-                <p style="font-size: 13px; margin-bottom: 15px;">يمكنك توليد عينات عشوائية فوراً لتجربة دقة الحسابات الرسومية والإحصائية وجدول الـ SPSS، وتصفيرها متى شئت.</p>
                 <button class="btn btn-accent" style="background:#38bdf8; color:#000;" onclick="generateMockData()">توليد 10 عينات مشاركين عشوائية <i class="fa-solid fa-bolt"></i></button>
                 <button class="btn btn-danger" onclick="clearLogs('userLogs')">تصفير سجل درجات المشاركين <i class="fa-solid fa-user-slash"></i></button>
                 <button class="btn btn-danger" onclick="clearLogs('consultations')">مسح كافة الاستشارات <i class="fa-solid fa-comment-slash"></i></button>
                 <button class="btn btn-danger" style="background:#b91c1c;" onclick="resetToDefault()">تهيئة النظام بالكامل للافتراضي <i class="fa-solid fa-trash-can"></i></button>
             </div>
 
+            <!-- أدوات التصدير الخارجي للبيانات -->
             <div class="dev-box">
                 <h3 style="color:var(--success);"><i class="fa-solid fa-file-excel"></i> مركز تصدير التقارير الإحصائية (Premium Export)</h3>
-                <p style="font-size: 13px; margin-bottom: 15px;">قم بتنزيل البيانات الخام الحالية فوراً بصيغة ملفات منظمّة وجاهزة للنقل لبرامج التحليل الإحصائي.</p>
                 <button class="btn" style="background:var(--success);" onclick="exportToCSV()">تصدير جدول الـ SPSS كـ ملف Excel / CSV <i class="fa-solid fa-file-csv"></i></button>
                 <button class="btn" style="background:var(--sidebar);" onclick="exportToJSON()">تنزيل نسخة إحتياطية كاملة Backup (JSON) <i class="fa-solid fa-download"></i></button>
             </div>
@@ -307,15 +325,10 @@
     <div class="platform-footer">Made By DR/ Amany & <span>Mohamed Hossam</span></div>
 
     <script>
-        // تنظيف الكاشات القديمة كلياً تلقائياً في الخلفية لضمان التحديث النظيف للروابط برمجياً
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(regs => { for(let r of regs) r.unregister(); });
-        }
-        if ('caches' in window) {
-            caches.keys().then(names => { for (let name of names) caches.delete(name); });
-        }
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.getRegistrations().then(regs => { for(let r of regs) r.unregister(); }); }
+        if ('caches' in window) { caches.keys().then(names => { for (let name of names) caches.delete(name); }); }
 
-        // رابط قاعدة البيانات السحابية لفايربيس الخاصة بك
+        // رابط قاعدة البيانات السحابية الخاصة بك
         const FIREBASE_URL = "https://aman-10e0a-default-rtdb.firebaseio.com/";
 
         if (!localStorage.getItem('user_device_uuid')) {
@@ -323,11 +336,10 @@
         }
         const deviceUuid = localStorage.getItem('user_device_uuid');
 
-        // مصفوفة البيانات وهيكلية النظام الافتراضية
         const defaultData = {
             sections: [
-                { id: "sec_hiv", name: "مسار فيروس نقص المناعة البشري (HIV)", script: "• الفيروس لا ينتقل بالمصافحة، العناق، أو استخدام الأدوات الشخصية العامة.\n• بروتوكول الوقاية الطارئ (PEP) فعال بنسبة تفوق 90% لمنع العدوى بشرط بدء استخدامه خلال أول 72 ساعة كحد أقصى من العلاقة غير الآمنة." },
-                { id: "sec_syphilis", name: "مسار مرض الزهري البكتيري (Syphilis)", script: "• ينتقل مرض الزهري عبر الاتصال المباشر بالقروح أثناء العلاقة الجنسية.\n• الفحص القطعي يتم عبر سحب عينة دم مخبرية وليس بمجرد الرؤية الظاهرية للأعراض، ويعالج في مراحله المبكرة تماماً بالمضادات الحيوية المناسبة." }
+                { id: "sec_hiv", name: "مسار فيروس نقص المناعة البشري (HIV)", script: "• الفيروس لا ينتقل بالمصافحة، العناق، أو استخدام الأدوات الشخصية العامة.\n• بروتوكول الوقاية الطارئ (PEP) فعال بنسبة تفوق 90% لمنع العدوى بشرط بدء استخدامه خلال أول 72 ساعة كحد أقصى." },
+                { id: "sec_syphilis", name: "مسار مرض الزهري البكتيري (Syphilis)", script: "• ينتقل مرض الزهري عبر الاتصال المباشر بالقروح أثناء العلاقة الجنسية.\n• الفحص القطعي يتم عبر سحب عينة دم مخبرية وليس بمجرد الرؤية الظاهرية للأعراض." }
             ],
             questions: [
                 { sectionId: "sec_hiv", q: "يمكن لفيروس نقص المناعة البشري (HIV) أن ينتقل بين الأشخاص عبر المصافحة العادية أو العناق.", c: "غلط" },
@@ -335,18 +347,19 @@
             ],
             userLogs: {},
             consultations: {},
-            // تهيئة إعدادات الأكواد الافتراضية في السيرفر لأول مرة
             serverConfig: {
-                parentCode: "104230",  // الكود الماستر الأم الافتراضي
-                amanyCode: "*20*30"   // كود الدخول لدكتورة اماني الافتراضي
+                devCode: "104230",
+                parentCode: "104230",
+                amanyCode: "*20*30",
+                isLocked: false // الحالة التلقائية للموقع (مفتوح)
             }
         };
 
         let appData = {...defaultData};
         let currentUser = { name: "", job: "" }, selectedSectionId = "", isPostTest = false, currentQuestionIndex = 0, preCorrectCount = 0, postCorrectCount = 0, currentSectionQuestions = [];
         let secretClickCount = 0, lastClickTime = 0;
+        let isDevActive = false; // يحدد إذا كان المطور داخل لوحته لمنع قفله هو شخصياً
 
-        // التقاط الـ 5 ضغطات السرية على كلمة أمان
         document.getElementById('secret-click-zone').addEventListener('click', function() {
             const currentTime = new Date().getTime();
             if (currentTime - lastClickTime < 1500) secretClickCount++;
@@ -355,7 +368,7 @@
             if (secretClickCount === 5) { secretClickCount = 0; openAdminViaGesture(); }
         });
 
-        // مزامنة وسحب البيانات الحية فورياً من السيرفر بدون شاشات تحميل تعيق الزوار
+        // سحب ومراقبة مستمرة لحالة القفل السحابي والمزامنة الصامتة
         async function fetchAllDataFromServer() {
             try {
                 const response = await fetch(`${FIREBASE_URL}.json`);
@@ -365,28 +378,70 @@
                     appData.questions = data.questions || [];
                     appData.userLogs = data.userLogs || {};
                     appData.consultations = data.consultations || {};
-                    appData.serverConfig = data.serverConfig || { parentCode: "104230", amanyCode: "*20*30" };
+                    appData.serverConfig = data.serverConfig || { devCode: "104230", parentCode: "104230", amanyCode: "*20*30", isLocked: false };
                 } else {
-                    // رفع التكوين البدئي للسيرفر إذا كان فارغاً تماماً
                     await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
                 }
                 
-                // ملء خانات الأكواد تلقائياً في واجهة المطور لتعكس داتا السيرفر
+                // معالجة القفل والتعطيل للمستخدمين
+                handleLockMechanism();
+
                 if(appData.serverConfig) {
+                    document.getElementById('dev-my-own-code').value = appData.serverConfig.devCode || "104230";
                     document.getElementById('dev-parent-code-input').value = appData.serverConfig.parentCode || "104230";
                     document.getElementById('dev-amany-code-input').value = appData.serverConfig.amanyCode || "*20*30";
+                    
+                    // تحديث واجهة زر القفل داخل لوحة المطور
+                    const lockBtn = document.getElementById('dev-toggle-lock-btn');
+                    if(appData.serverConfig.isLocked) {
+                        lockBtn.innerHTML = 'تعطيل وضع التحديث وتشغيل الموقع فوراً للكل <i class="fa-solid fa-play"></i>';
+                        lockBtn.style.background = "var(--success)";
+                    } else {
+                        lockBtn.innerHTML = 'إغلاق الموقع وتشغيل شاشة (برجاء الانتظار يتم التحديث الآن) <i class="fa-solid fa-power-off"></i>';
+                        lockBtn.style.background = "var(--danger)";
+                    }
                 }
                 
                 checkDeviceConsultationStatus();
-            } catch (error) { console.log("المنظومة تعمل محلياً بالسرعة القصوى."); }
+            } catch (error) { console.log("السيستم يعمل محلياً بسرعة قصوى."); }
         }
+        
+        // تشغيل مراقبة في الخلفية كل ثانيتين للتحديث التلقائي الفوري بدون شاشات تحميل
+        setInterval(fetchAllDataFromServer, 2000);
         window.onload = fetchAllDataFromServer;
+
+        function handleLockMechanism() {
+            const mScreen = document.getElementById('maintenance-screen');
+            if (appData.serverConfig && appData.serverConfig.isLocked === true) {
+                // لو السيرفر مغلق والمفتوح مش لوحة المطور، اقفل الشاشة فوراً
+                if (!isDevActive) {
+                    mScreen.style.display = "flex";
+                } else {
+                    mScreen.style.display = "none";
+                }
+            } else {
+                mScreen.style.display = "none";
+            }
+        }
+
+        // دالة المطور لتبديل حالة القفل صامتاً
+        async function togglePlatformLock() {
+            let currentStatus = (appData.serverConfig && appData.serverConfig.isLocked === true);
+            let nextStatus = !currentStatus;
+            
+            await fetch(`${FIREBASE_URL}serverConfig/isLocked.json`, { method: 'PUT', body: JSON.stringify(nextStatus) });
+            await fetchAllDataFromServer();
+        }
 
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             const pBar = document.getElementById('global-progress');
             pBar.style.display = (id === 'page-quiz' || id === 'page-awareness' || id === 'page-result') ? 'block' : 'none';
+            
+            // إذا خرج المطور للرئيسية نقوم بإعادة فحص الحظر
+            isDevActive = (id === 'page-dev');
+            handleLockMechanism();
         }
 
         function updateProgressBar(percent) { document.getElementById('global-progress-bar').style.width = percent + "%"; }
@@ -536,47 +591,41 @@
             }
         }
 
-        // معالجة الدخول بناء على مصفوفة الأكواد الديناميكية القادمة من السيرفر
         function openAdminViaGesture() {
-            let pass = prompt("التحقق الأمني الشامل للمنصة | يرجى إدخال رمز المرور الماستر:");
+            let pass = prompt("التحقق الأمني للمنصة | يرجى إدخال رمز المرور الماستر:");
             if(pass === null || pass.trim() === "") return;
             pass = pass.trim();
 
+            let currentDevCode = (appData.serverConfig && appData.serverConfig.devCode) ? appData.serverConfig.devCode : "104230";
             let currentAmanyCode = (appData.serverConfig && appData.serverConfig.amanyCode) ? appData.serverConfig.amanyCode : "*20*30";
 
-            if (pass === currentAmanyCode) {
-                renderSharedDashboardData();
-                showPage('page-admin');
-            } else if (pass === "104230") {
-                // الكود السوبر الثابت الخاص بالبشمهندس محمد للدخول المباشر للوحة المطور
+            if (pass === currentDevCode) {
+                isDevActive = true;
                 renderSharedDashboardData();
                 showPage('page-dev');
+            } else if (pass === currentAmanyCode) {
+                isDevActive = false;
+                renderSharedDashboardData();
+                showPage('page-admin');
             } else { alert("رمز المرور غير صحيح!"); }
         }
 
-        function showUserPage() { showPage('page-login'); }
+        function showUserPage() { isDevActive = false; showPage('page-login'); }
 
-        // دالة موحدة لتغذية البيانات وعرضها في لوحة أماني ولوحة المطور
         function renderSharedDashboardData() {
             const logs = Object.values(appData.userLogs || {});
-            
-            // حساب الإحصائيات
             let totalUsers = logs.length;
             let sumPre = 0, sumPost = 0, sumGrowth = 0;
-            logs.forEach(u => { 
-                sumPre += parseInt(u.preScore)||0; sumPost += parseInt(u.postScore)||0; sumGrowth += parseInt(u.growth)||0;
-            });
+            logs.forEach(u => { sumPre += parseInt(u.preScore)||0; sumPost += parseInt(u.postScore)||0; sumGrowth += parseInt(u.growth)||0; });
             let avgPre = totalUsers > 0 ? Math.round(sumPre / totalUsers) + "%" : "0%";
             let avgPost = totalUsers > 0 ? Math.round(sumPost / totalUsers) + "%" : "0%";
             let avgGrowth = totalUsers > 0 ? Math.round(sumGrowth / totalUsers) + "%" : "0%";
 
-            // حقن العدادات في الشاشتين
             document.querySelectorAll('.stat-total-users').forEach(el => el.innerText = totalUsers);
             document.querySelectorAll('.stat-avg-pre').forEach(el => el.innerText = avgPre);
             document.querySelectorAll('.stat-avg-post').forEach(el => el.innerText = avgPost);
             document.querySelectorAll('.stat-avg-growth').forEach(el => el.innerText = avgGrowth);
 
-            // حقن الجداول
             document.querySelectorAll('.admin-users-logs').forEach(tableBody => {
                 tableBody.innerHTML = "";
                 logs.forEach(u => {
@@ -584,7 +633,6 @@
                 });
             });
 
-            // حقن الاستشارات للرد
             document.querySelectorAll('.admin-consultations-container').forEach(consContainer => {
                 consContainer.innerHTML = "";
                 const consKeys = Object.keys(appData.consultations || {});
@@ -610,7 +658,6 @@
                 }
             });
 
-            // حقن المحاور التعليمية
             document.querySelectorAll('.admin-sections-list').forEach(secList => {
                 secList.innerHTML = "";
                 appData.sections.forEach(sec => {
@@ -683,9 +730,8 @@
             renderSharedDashboardData();
         }
 
-        // ميزة تغيير د/ اماني لكود دخولها بشرط معرفة الكود الأم الماستر للمطور
         async function amanyTryChangeCode() {
-            let parentCheck = prompt("تعديل الصلاحيات الإدارية | يرجى إدخال (الكود الأم الماستر) للمطور أولاً لتعديل الرمز الخاص بكِ:");
+            let parentCheck = prompt("تعديل الصلاحيات الإدارية | يرجى إدخال (الكود الأم الماستر) لتعديل الرمز الخاص بكِ:");
             if (parentCheck === null) return;
             parentCheck = parentCheck.trim();
 
@@ -699,11 +745,19 @@
                     await fetchAllDataFromServer();
                 }
             } else {
-                alert("عفواً! الكود الأم الماستر غير صحيح. يرجى مراجعة بشمهندس محمد المطور الحصري للمنصة لتلقي كود الأمان الجديد.");
+                alert("عفواً! الكود الأم الماستر غير صحيح. يرجى مراجعة بشمهندس محمد للحصول عليه.");
             }
         }
 
-        // [تحديث المطور]: حفظ الكود الأم الماستر الجديد في الـ Firebase
+        async function updateDevOwnCode() {
+            const newDev = document.getElementById('dev-my-own-code').value.trim();
+            if (newDev !== "") {
+                await fetch(`${FIREBASE_URL}serverConfig/devCode.json`, { method: 'PUT', body: JSON.stringify(newDev) });
+                alert("تم تحديث كود دخولك الخارق بنجاح في السيرفر!");
+                await fetchAllDataFromServer();
+            } else { alert("يرجى كتابة كود صالح."); }
+        }
+
         async function updateParentCode() {
             const newParent = document.getElementById('dev-parent-code-input').value.trim();
             if (newParent !== "") {
@@ -713,7 +767,6 @@
             } else { alert("يرجى كتابة كود صالح."); }
         }
 
-        // [تحديث المطور]: تعديل كود أماني مباشرة وبضغطة واحدة من لوحة التحكم
         async function updateAmanyCodeDirectly() {
             const newAmany = document.getElementById('dev-amany-code-input').value.trim();
             if (newAmany !== "") {
@@ -723,7 +776,6 @@
             } else { alert("يرجى كتابة كود دخول صالح."); }
         }
 
-        /* حزمة أدوات التحكم الخارقة للمطور (بشمهندس محمد) */
         async function generateMockData() {
             const names = ["أحمد محمود علي", "سارة محمد أحمد", "كود بحثي 405", "مشارك مجهول 22", "مصطفى السيد حسين", "نور الهدى عبده", "هاني شاكر حسن", "عبد الرحمن فوزي", "رنا جلال كمال", "مريم رأفت مسعود"];
             const jobs = ["طالب ثانوي فني", "ممارس عام", "فني مختبر", "طالب أكاديمي", "مشارك عينة فنية"];
@@ -767,11 +819,7 @@
             if(logs.length === 0) return alert("لا توجد بيانات لتصديرها!");
             let csvContent = "\uFEFF"; 
             csvContent += "المشارك,التخصص/المستوى,المحور التعليمي,الاختبار القبلي,الاختبار البعدي,معدل النمو,التاريخ والوقت\n";
-            
-            logs.forEach(u => {
-                csvContent += `"${u.name}","${u.job}","${u.sectionName}","${u.preScore}","${u.postScore}","${u.growth}","${u.date}"\n`;
-            });
-
+            logs.forEach(u => { csvContent += `"${u.name}","${u.job}","${u.sectionName}","${u.preScore}","${u.postScore}","${u.growth}","${u.date}"\n`; });
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
@@ -815,7 +863,7 @@
                 questions: updatedQuestions,
                 userLogs: appData.userLogs || {},
                 consultations: appData.consultations || {},
-                serverConfig: appData.serverConfig || { parentCode: "104230", amanyCode: "*20*30" }
+                serverConfig: appData.serverConfig || { devCode: "104230", parentCode: "104230", amanyCode: "*20*30", isLocked: false }
             };
 
             try {
