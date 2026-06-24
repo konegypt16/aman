@@ -35,10 +35,11 @@
         
         .container { background: var(--card); border-radius: 24px; width: 100%; max-width: 950px; padding: 40px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
         
+        /* 🌟 تعديل تصميم شاشة الصيانة لتصبح متناسقة وتدعم الضغط السري */
         #maintenance-screen { display: none; position: fixed; top:0; left:0; width:100vw; height:100vh; background: var(--bg); z-index: 999999; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; }
         #maintenance-screen i { font-size: 70px; color: var(--accent); margin-bottom: 25px; animation: pulse 2s infinite; }
-        #maintenance-screen h1 { font-size: 28px; margin-bottom: 15px; color: var(--text); }
-        #maintenance-screen p { font-size: 16px; color: var(--muted); }
+        #maintenance-screen h1 { font-size: 26px; margin-bottom: 15px; color: var(--text); }
+        #maintenance-screen p { font-size: 16px; color: var(--muted); max-width: 500px; line-height: 1.8; }
 
         .progress-container { width: 100%; background: #24324d; height: 8px; border-radius: 10px; margin-bottom: 30px; display: none; overflow: hidden; }
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--success)); width: 0%; transition: width 0.4s ease; }
@@ -110,10 +111,11 @@
 </head>
 <body>
 
+    <!-- 🌟 شاشة الصيانة الذكية الجديدة: تظهر محتوى التحديث مع توفير كلمة "أمان" السرية المفتوحة للضغط دائماً -->
     <div id="maintenance-screen">
         <i class="fa-solid fa-screwdriver-wrench"></i>
-        <h1>برجاء الانتظار</h1>
-        <p>يتم تحديث المنصة وتحسين الأنظمة الآن.. سنعود لخدمتكم خلال لحظات وجيزة.</p>
+        <h1>منصة <span class="secret-trigger-lock" style="color: var(--primary); cursor: pointer; text-decoration: underline;">أمان</span> تحت التحديث الآن</h1>
+        <p>نعمل حالياً على إضافة ميزات بحثية جديدة وتطوير البنية السحابية للمنصة لخدمتكم بشكل أفضل.. سنعود خلال لحظات وجيزة.</p>
     </div>
 
     <div class="container">
@@ -121,8 +123,9 @@
             <div class="progress-bar" id="global-progress-bar"></div>
         </div>
 
+        <!-- 1. صفحة تسجيل الدخول ومتابعة الاستشارات -->
         <div class="page active" id="page-login">
-            <h2 style="text-align: center;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> حزمة <span id="secret-click-zone" class="secret-trigger" style="color: var(--primary);">أمان</span> التوعوية التفاعلية الشاملة</h2>
+            <h2 style="text-align: center;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> حزمة <span class="secret-trigger-main" style="color: var(--primary); cursor: pointer;">أمان</span> التوعوية التفاعلية الشاملة</h2>
             <p style="text-align: center; margin-bottom: 25px;">منصة رقمية متكاملة للقياس المعرفي والاستشارات السرية الفورية ضمن إطار دراسة بحثية أكاديمية.</p>
             
             <form onsubmit="saveUserData(event)">
@@ -155,6 +158,7 @@
             </div>
         </div>
 
+        <!-- 2. شاشة تصفح محاور القياس المعرفي -->
         <div class="page" id="page-sections">
             <h2>أهلاً بك: <span id="welcome-name" style="color: var(--primary);"></span></h2>
             <p>يرجى اختيار أحد المحاور لبدء فحص الوعي القبلي والبعدي المتكامل:</p>
@@ -162,6 +166,7 @@
             <button class="btn btn-danger" onclick="location.reload()" style="margin-top: 30px;"><i class="fa-solid fa-arrow-right"></i> تسجيل الخروج/العودة للرئيسية</button>
         </div>
 
+        <!-- 3. صفحة مصفوفة أسئلة القياس التفاعلي -->
         <div class="page" id="page-quiz">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h3 id="quiz-type-title" style="color: var(--accent); margin: 0;">أداة القياس</h3>
@@ -173,6 +178,7 @@
             </div>
         </div>
 
+        <!-- 4. صفحة عرض المادة العلمية التمكينية -->
         <div class="page" id="page-awareness">
             <h2><i class="fa-solid fa-book-medical" style="color:var(--primary)"></i> الدليل الوقائي والتوعوي المعتمد</h2>
             <p>يرجى قراءة المادة التوعوية التالية بتمعن لتصحيح المفاهيم قبل اختبار قياس الاستفادة البعدي:</p>
@@ -181,6 +187,7 @@
             <button class="btn btn-block" onclick="startPostQuiz()">الانتقال إلى الاختبار البعدي لقياس الأثر المعرفي <i class="fa-solid fa-arrow-left"></i></button>
         </div>
 
+        <!-- 5. صفحة عرض كارت التمكين والنتائج الإحصائية الفردية -->
         <div class="page" id="page-result">
             <h2 style="text-align: center;"><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> اكتمل المحور البحثي بنجاح</h2>
             <div class="badge-wrapper">
@@ -198,6 +205,7 @@
             <button class="btn btn-block" onclick="showSectionsPage()"><i class="fa-solid fa-arrow-rotate-right"></i> العودة لقائمة المسارات البحثية والمتابعة</button>
         </div>
 
+        <!-- 6. لوحة تحكم د/ أماني الأكاديمية -->
         <div class="page" id="page-admin">
             <h2><i class="fa-solid fa-chart-line" style="color:var(--primary)"></i> أهلاً بكِ يا دكتورة أماني في لوحة الإدارة الأكاديمية</h2>
             <p style="margin-bottom: 25px;">مصفوفة القياس الإحصائي المخصصة لمتابعة الاستجابات وعينة البحث العلمي الحالية.</p>
@@ -238,6 +246,7 @@
             <button class="btn btn-danger btn-block" onclick="showUserPage()">الخروج والعودة لواجهة المنصة</button>
         </div>
 
+        <!-- 7. لوحة تحكم المطور الحصرية الخارقة للبشمهندس محمد -->
         <div class="page" id="page-dev">
             <div class="server-status">
                 <div class="server-pulse"></div>
@@ -248,7 +257,7 @@
 
             <div class="dev-box" style="border-color: var(--danger); background: rgba(239, 68, 68, 0.02);">
                 <h3 style="color: var(--danger);"><i class="fa-solid fa-power-off"></i> زر القفل والتحكم في حالة الموقع (Kill Switch)</h3>
-                <p style="font-size: 13px; margin-bottom: 15px;">بضغطة واحدة، يمكنك حظر الزوار وإظهار شاشة (برجاء الانتظار يتم التحديث الآن) فوراً لحين انتهائك.</p>
+                <p style="font-size: 13px; margin-bottom: 15px;">بضغطة واحدة، يمكنك حظر الزوار وإظهار شاشة التحديث فوراً لحين انتهائك.</p>
                 <button id="dev-toggle-lock-btn" class="btn btn-danger" onclick="togglePlatformLock()">جاري فحص حالة السيرفر...</button>
             </div>
 
@@ -355,12 +364,18 @@
         let secretClickCount = 0, lastClickTime = 0;
         let isDevActive = false;
 
-        document.getElementById('secret-click-zone').addEventListener('click', function() {
+        // 🌟 دالة معالجة الضغطات الموحدة
+        function handleSecretClick() {
             const currentTime = new Date().getTime();
             if (currentTime - lastClickTime < 1500) secretClickCount++;
             else secretClickCount = 1;
             lastClickTime = currentTime;
             if (secretClickCount === 5) { secretClickCount = 0; openAdminViaGesture(); }
+        }
+
+        // ربط الضغطات السحرية بكلمة أمان في الواجهة الرئيسية وفي واجهة التحديث المزدوجة
+        document.querySelectorAll('.secret-trigger-main, .secret-trigger-lock').forEach(el => {
+            el.addEventListener('click', handleSecretClick);
         });
 
         async function fetchAllDataFromServer() {
@@ -393,7 +408,7 @@
                         lockBtn.innerHTML = 'تعطيل وضع التحديث وتشغيل الموقع فوراً للكل <i class="fa-solid fa-play"></i>';
                         lockBtn.style.background = "var(--success)";
                     } else {
-                        lockBtn.innerHTML = 'إغلاق الموقع وتشغيل شاشة (برجاء الانتظار يتم التحديث الآن) <i class="fa-solid fa-power-off"></i>';
+                        lockBtn.innerHTML = 'إغلاق الموقع وتشغيل شاشة التحديث لحظر المستخدمين <i class="fa-solid fa-power-off"></i>';
                         lockBtn.style.background = "var(--danger)";
                     }
                 }
@@ -408,7 +423,7 @@
         function handleLockMechanism() {
             const mScreen = document.getElementById('maintenance-screen');
             if (appData.serverConfig && appData.serverConfig.isLocked === true) {
-                if (!isDevActive) {
+                if (!isDevActive && document.querySelector('.page.active').id !== 'page-admin') {
                     mScreen.style.display = "flex";
                 } else {
                     mScreen.style.display = "none";
@@ -430,7 +445,7 @@
             document.getElementById(id).classList.add('active');
             const pBar = document.getElementById('global-progress');
             pBar.style.display = (id === 'page-quiz' || id === 'page-awareness' || id === 'page-result') ? 'block' : 'none';
-            isDevActive = (id === 'page-dev');
+            isDevActive = (id === 'page-dev' || id === 'page-admin');
             handleLockMechanism();
         }
 
@@ -592,7 +607,7 @@
                 renderSharedDashboardData();
                 showPage('page-dev');
             } else if (pass === currentAmanyCode) {
-                isDevActive = false;
+                isDevActive = true; 
                 renderSharedDashboardData();
                 showPage('page-admin');
             } else { alert("رمز المرور غير صحيح!"); }
