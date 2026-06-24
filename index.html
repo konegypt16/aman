@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المنصة البحثية الشاملة | أمان للتوعية والتمكين الرقمي</title>
     
-    <!-- منع الكاش نهائياً لضمان التحديث الفوري -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <meta name="description" content="منصة متكاملة للقياس المعرفي والاستشارات السرية في إطار دراسة أكاديمية معتمدة.">
     <meta name="robots" content="noindex, nofollow">
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         :root {
             --bg: #0b0f19;
@@ -31,9 +32,9 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; position: relative; padding-bottom: 80px; }
+        body { background-color: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; position: relative; padding-bottom: 80px; transition: background 0.3s ease; }
         
-        .container { background: var(--card); border-radius: 24px; width: 100%; max-width: 900px; padding: 40px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .container { background: var(--card); border-radius: 24px; width: 100%; max-width: 950px; padding: 40px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
         
         .progress-container { width: 100%; background: #24324d; height: 8px; border-radius: 10px; margin-bottom: 30px; display: none; overflow: hidden; }
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--success)); width: 0%; transition: width 0.4s ease; }
@@ -76,7 +77,7 @@
         .badge-icon { width: 80px; height: 80px; background: rgba(245, 158, 11, 0.1); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 35px; border: 2px dashed var(--accent); }
 
         .form-group { margin-bottom: 20px; text-align: right; }
-        .form-group label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 14px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 14px; font-weight: bold; }
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 14px; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 16px; }
         
         .admin-q-card { background: #0b0f19; padding: 25px; border-radius: 16px; margin-bottom: 20px; border-left: 4px solid var(--accent); position: relative; }
@@ -91,10 +92,17 @@
         .users-table th, .users-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .users-table th { background: #0b0f19; color: var(--accent); }
 
+        /* ستايلات حصرية لواجهة المطور */
+        .dev-badge { background: #38bdf8; color: #000; padding: 4px 12px; font-size: 12px; font-weight: bold; border-radius: 6px; margin-right: 10px; display: inline-block; vertical-align: middle; }
+        .server-status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--success); background: rgba(16, 185, 129, 0.1); padding: 5px 12px; border-radius: 20px; float: left; }
+        .server-pulse { width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse 1.5s infinite; }
+        .dev-box { background: rgba(56, 189, 248, 0.03); border: 1px dashed rgba(56, 189, 248, 0.2); padding: 20px; border-radius: 16px; margin-bottom: 25px; }
+
         .platform-footer { position: fixed; bottom: 15px; right: 20px; font-size: 14px; color: var(--muted); font-weight: 600; z-index: 90; direction: ltr; }
         .platform-footer span { color: var(--accent); }
         .secret-trigger { cursor: default; user-select: none; }
 
+        @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.6; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -105,7 +113,6 @@
             <div class="progress-bar" id="global-progress-bar"></div>
         </div>
 
-        <!-- 1. صفحة تسجيل الدخول ومتابعة الاستشارات الاستشارية المباشرة -->
         <div class="page active" id="page-login">
             <h2 style="text-align: center;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> حزمة <span id="secret-click-zone" class="secret-trigger" style="color: var(--primary);">أمان</span> التوعوية التفاعلية الشاملة</h2>
             <p style="text-align: center; margin-bottom: 25px;">منصة رقمية متكاملة للقياس المعرفي والاستشارات السرية الفورية ضمن إطار دراسة بحثية أكاديمية.</p>
@@ -144,7 +151,6 @@
             </div>
         </div>
 
-        <!-- 2. شاشة تصفح محاور القياس المعرفي -->
         <div class="page" id="page-sections">
             <h2>أهلاً بك: <span id="welcome-name" style="color: var(--primary);"></span></h2>
             <p>يرجى اختيار أحد المحاور لبدء فحص الوعي القبلي والبعدي المتكامل:</p>
@@ -152,7 +158,6 @@
             <button class="btn btn-danger" onclick="location.reload()" style="margin-top: 30px;"><i class="fa-solid fa-arrow-right"></i> تسجيل الخروج/العودة للرئيسية</button>
         </div>
 
-        <!-- 3. صفحة مصفوفة أسئلة القياس التفاعلي -->
         <div class="page" id="page-quiz">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h3 id="quiz-type-title" style="color: var(--accent); margin: 0;">أداة القياس</h3>
@@ -164,7 +169,6 @@
             </div>
         </div>
 
-        <!-- 4. صفحة عرض المادة العلمية التمكينية (المتغير المستقل) -->
         <div class="page" id="page-awareness">
             <h2><i class="fa-solid fa-book-medical" style="color:var(--primary)"></i> الدليل الوقائي والتوعوي المعتمد</h2>
             <p>يرجى قراءة المادة التوعوية التالية بتمعن لتصحيح المفاهيم قبل اختبار قياس الاستفادة البعدي:</p>
@@ -173,7 +177,6 @@
             <button class="btn btn-block" onclick="startPostQuiz()">الانتقال إلى الاختبار البعدي لقياس الأثر المعرفي <i class="fa-solid fa-arrow-left"></i></button>
         </div>
 
-        <!-- 5. صفحة عرض كارت التمكين والنتائج الإحصائية الفردية -->
         <div class="page" id="page-result">
             <h2 style="text-align: center;"><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> اكتمل المحور البحثي بنجاح</h2>
             
@@ -184,8 +187,8 @@
                     <p style="color: white; font-weight: bold; font-size: 18px; margin-bottom: 15px;" id="badge-user-name">المشارك</p>
                     <p style="font-size: 14px; color: var(--muted); margin-bottom: 20px;">أتم بنجاح متطلبات المسار التوعوي لـ:<br><strong id="badge-sec-name" style="color: var(--primary);">المحور الحالي</strong></p>
                     <div style="display: flex; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-                        <div><span style="font-size: 12px; color: var(--muted);">الاختبار القبلي</span><br><strong id="res-pre" style="color: var(--accent);">0%</strong></div>
-                        <div><span style="font-size: 12px; color: var(--muted);">الاختبار البعدي</span><br><strong id="res-post" style="color: var(--success);">0%</strong></div>
+                        <div><span style="font-size: 12px; color: var(--muted);">الافتتاح القبلي</span><br><strong id="res-pre" style="color: var(--accent);">0%</strong></div>
+                        <div><span style="font-size: 12px; color: var(--muted);">الافتتاح البعدي</span><br><strong id="res-post" style="color: var(--success);">0%</strong></div>
                     </div>
                 </div>
             </div>
@@ -193,56 +196,106 @@
             <button class="btn btn-block" onclick="showSectionsPage()"><i class="fa-solid fa-arrow-rotate-right"></i> العودة لقائمة المسارات البحثية والمتابعة</button>
         </div>
 
-        <!-- 6. لوحة تحكم الباحث الإحصائية والإدارية الشاملة للماجستير -->
         <div class="page" id="page-admin">
-            <h2><i class="fa-solid fa-chart-line"></i> الإدارة الشاملة ومؤشرات القياس الإحصائي (SPSS Matrix)</h2>
+            <h2><i class="fa-solid fa-chart-line" style="color:var(--primary)"></i> أهلاً بكِ يا دكتورة أماني في لوحة الإدارة الأكاديمية</h2>
+            <p style="margin-bottom: 25px;">مصفوفة القياس الإحصائي المخصصة لمتابعة الاستجابات وعينة البحث العلمي الحالية.</p>
             
-            <div style="background: rgba(13, 148, 136, 0.1); border: 1px solid var(--primary); padding: 20px; border-radius: 166px; margin-bottom: 25px; border-radius: 16px;">
-                <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;"><i class="fa-solid fa-key"></i> إدارة وتعديل الرمز الماستر للمنصة</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                    <div class="form-group" style="margin: 0;">
-                        <label>الرمز الماستر الجديد:</label>
-                        <input type="text" id="new-master-code" placeholder="أدخل الرمز الماستر الجديد">
-                    </div>
-                    <div class="form-group" style="margin: 0;">
-                        <label>الرمز التأكيدي الحالي للمطابقة:</label>
-                        <input type="password" id="mother-code-input" placeholder="••••">
-                    </div>
-                </div>
-                <button class="btn" style="margin-top: 15px; padding: 8px 25px; font-size: 13px;" onclick="changeMasterCode()">تحديث الرمز الماستر وحفظه <i class="fa-solid fa-lock-open"></i></button>
-            </div>
-
             <div class="analytics-grid">
-                <div class="stat-card"><h4>حجم العينة (N)</h4><p id="stat-total-users">0</p></div>
-                <div class="stat-card"><h4>متوسط القبلي (Pre-Avg)</h4><p id="stat-avg-pre" style="color: var(--accent);">0%</p></div>
-                <div class="stat-card"><h4>متوسط البعدي (Post-Avg)</h4><p id="stat-avg-post" style="color: var(--success);">0%</p></div>
-                <div class="stat-card"><h4>نسبة نمو المعرفة الفعلي</h4><p id="stat-avg-growth" style="color: #38bdf8;">0%</p></div>
+                <div class="stat-card"><h4>حجم العينة (N)</h4><p class="stat-total-users">0</p></div>
+                <div class="stat-card"><h4>متوسط القبلي (Pre-Avg)</h4><p class="stat-avg-pre" style="color: var(--accent);">0%</p></div>
+                <div class="stat-card"><h4>متوسط البعدي (Post-Avg)</h4><p class="stat-avg-post" style="color: var(--success);">0%</p></div>
+                <div class="stat-card"><h4>نسبة نمو المعرفة</h4><p class="stat-avg-growth" style="color: #38bdf8;">0%</p></div>
             </div>
 
-            <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); padding: 15px; border-radius: 16px; margin-bottom: 25px; display: flex; gap: 15px;">
-                <button class="btn btn-danger" style="margin:0; flex: 1; font-size:13px;" onclick="clearLogs('userLogs')"><i class="fa-solid fa-user-slash"></i> تصفير سجل درجات المشاركين</button>
-                <button class="btn btn-danger" style="margin:0; flex: 1; font-size:13px;" onclick="clearLogs('consultations')"><i class="fa-solid fa-comment-slash"></i> مسح الاستشارات الواردة</button>
-                <button class="btn btn-danger" style="margin:0; flex: 1; background:#b91c1c; font-size:13px;" onclick="resetToDefault()"><i class="fa-solid fa-trash-can"></i> تهيئة النظام للافتراضي</button>
+            <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05);">
+                <h4><i class="fa-solid fa-key" style="color:var(--accent);"></i> إدارة الأمان السري للوحة</h4>
+                <p style="font-size:13px; margin-bottom:10px;">يمكنكِ تعديل الرمز السري الخاص بالدخول إلى لوحتك الأكاديمية من هنا بشرط إدخال الكود الماستر الأم.</p>
+                <button class="btn btn-accent" style="margin:0; padding:8px 20px; font-size:13px;" onclick="amanyTryChangeCode()">تعديل كود الدخول الخاص بي <i class="fa-solid fa-lock-open"></i></button>
             </div>
 
             <h3 style="color: var(--accent);"><i class="fa-solid fa-envelope-open-text"></i> الاستشارات الواردة من عينة البحث للرد</h3>
-            <div id="admin-consultations-container" style="background:#0b0f19; padding:20px; border-radius:16px; margin-bottom:30px;">
+            <div class="admin-consultations-container" style="background:#0b0f19; padding:20px; border-radius:16px; margin-bottom:30px;">
                 <p style="text-align:center; color:var(--muted)">لا توجد استشارات معلقة حالياً.</p>
             </div>
 
-            <h3><i class="fa-solid fa-folder-open"></i> إدارة محاور المسارات التعليمية</h3>
-            <div id="admin-sections-list" style="background: #0b0f19; padding: 25px; border-radius: 16px; margin-bottom: 25px;"></div>
+            <h3><i class="fa-solid fa-folder-open"></i> محاور المسارات التعليمية الحالية</h3>
+            <div class="admin-sections-list" style="background: #0b0f19; padding: 25px; border-radius: 16px; margin-bottom: 25px;"></div>
+            
+            <h3 style="margin-top: 35px;"><i class="fa-solid fa-database"></i> جدول البيانات الإحصائية الخام (Raw Data Matrix)</h3>
+            <div style="max-height: 300px; overflow-y: auto; background: #1e293b; padding: 10px; border-radius: 12px; margin-top: 10px;">
+                <table class="users-table">
+                    <thead><tr><th>المشارك</th><th>التخصص</th><th>المسار</th><th>قبلّي</th><th>بعدّي</th><th>معدل النمو</th><th>التاريخ والوقت</th></tr></thead>
+                    <tbody class="admin-users-logs"></tbody>
+                </table>
+            </div>
+            <br>
+            <button class="btn btn-danger btn-block" onclick="showUserPage()">الخروج والعودة لواجهة المنصة</button>
+        </div>
+
+        <div class="page" id="page-dev">
+            <div class="server-status">
+                <div class="server-pulse"></div>
+                <span>Firebase Connected Online</span>
+            </div>
+            <h2><i class="fa-solid fa-terminal" style="color:#38bdf8"></i> لوحة تحكم المطور الخارقة <span class="dev-badge">Super Admin</span></h2>
+            <p style="margin-bottom: 25px;">أهلاً بك يا بشمهندس محمد. لديك الصلاحيات المطلقة لإدارة السيرفر، الصيانة، وتغيير الأكواد بالكامل.</p>
+
+            <div class="dev-box" style="background: rgba(245, 158, 11, 0.03); border-color: rgba(245, 158, 11, 0.25);">
+                <h3 style="color: var(--accent);"><i class="fa-solid fa-shield-halved"></i> 🎛️ لوحة إدارة الأكواد والخلية السحابية الماستر</h3>
+                <p style="font-size:13px; margin-bottom: 15px;">بصفتك المطور، يمكنك التحكم بالكود الأم وتحديث كود دكتورة أماني مباشرة من هنا وسينعكس فوراً سحابياً.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>الكود الأم الماستر الحالي (Parent Key):</label>
+                        <input type="text" id="dev-parent-code-input" style="border-color: rgba(245,158,11,0.3);">
+                        <button class="btn btn-accent" style="padding: 6px 15px; font-size:12px; margin-top:10px;" onclick="updateParentCode()">تحديث الكود الأم الماستر <i class="fa-solid fa-square-check"></i></button>
+                    </div>
+                    <div class="form-group">
+                        <label>كود دخول دكتورة أماني المباشر (Amany Code):</label>
+                        <input type="text" id="dev-amany-code-input" style="border-color: rgba(13,148,136,0.3);">
+                        <button class="btn" style="padding: 6px 15px; font-size:12px; margin-top:10px;" onclick="updateAmanyCodeDirectly()">تعديل كود أماني فوراً <i class="fa-solid fa-user-lock"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dev-box">
+                <h3 style="color:#38bdf8;"><i class="fa-solid fa-flask"></i> نظام محاكاة واختبار البيانات (System Simulator)</h3>
+                <p style="font-size: 13px; margin-bottom: 15px;">يمكنك توليد عينات عشوائية فوراً لتجربة دقة الحسابات الرسومية والإحصائية وجدول الـ SPSS، وتصفيرها متى شئت.</p>
+                <button class="btn btn-accent" style="background:#38bdf8; color:#000;" onclick="generateMockData()">توليد 10 عينات مشاركين عشوائية <i class="fa-solid fa-bolt"></i></button>
+                <button class="btn btn-danger" onclick="clearLogs('userLogs')">تصفير سجل درجات المشاركين <i class="fa-solid fa-user-slash"></i></button>
+                <button class="btn btn-danger" onclick="clearLogs('consultations')">مسح كافة الاستشارات <i class="fa-solid fa-comment-slash"></i></button>
+                <button class="btn btn-danger" style="background:#b91c1c;" onclick="resetToDefault()">تهيئة النظام بالكامل للافتراضي <i class="fa-solid fa-trash-can"></i></button>
+            </div>
+
+            <div class="dev-box">
+                <h3 style="color:var(--success);"><i class="fa-solid fa-file-excel"></i> مركز تصدير التقارير الإحصائية (Premium Export)</h3>
+                <p style="font-size: 13px; margin-bottom: 15px;">قم بتنزيل البيانات الخام الحالية فوراً بصيغة ملفات منظمّة وجاهزة للنقل لبرامج التحليل الإحصائي.</p>
+                <button class="btn" style="background:var(--success);" onclick="exportToCSV()">تصدير جدول الـ SPSS كـ ملف Excel / CSV <i class="fa-solid fa-file-csv"></i></button>
+                <button class="btn" style="background:var(--sidebar);" onclick="exportToJSON()">تنزيل نسخة إحتياطية كاملة Backup (JSON) <i class="fa-solid fa-download"></i></button>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="stat-card" style="border-color:#38bdf8"><h4>إجمالي المسجلين (N)</h4><p class="stat-total-users">0</p></div>
+                <div class="stat-card"><h4>متوسط القبلي</h4><p class="stat-avg-pre">0%</p></div>
+                <div class="stat-card"><h4>متوسط البعدي</h4><p class="stat-avg-post">0%</p></div>
+                <div class="stat-card"><h4>معدل النمو</h4><p class="stat-avg-growth">0%</p></div>
+            </div>
+
+            <h3><i class="fa-solid fa-envelope-open-text"></i> الاستشارات الواردة (صلاحية رد المطور)</h3>
+            <div class="admin-consultations-container" style="background:#0b0f19; padding:20px; border-radius:16px; margin-bottom:30px;"></div>
+
+            <h3><i class="fa-solid fa-folder-plus"></i> إدارة المحاور والأسئلة (تعديل الهيكل السحابي)</h3>
+            <div class="admin-sections-list" style="background: #0b0f19; padding: 25px; border-radius: 16px; margin-bottom: 25px;"></div>
             <button class="btn btn-accent" onclick="addNewSectionField()"><i class="fa-solid fa-plus"></i> إضافة محور/سكشن جديد</button>
 
-            <h3 style="margin-top: 30px;"><i class="fa-solid fa-file-medical-question"></i> مصفوفة العبارات والأسئلة القياسية</h3>
-            <div id="admin-questions-list"></div>
+            <h3 style="margin-top:30px;"><i class="fa-solid fa-file-medical-question"></i> بنود العبارات والأسئلة القياسية</h3>
+            <div id="dev-questions-list"></div>
             <button class="btn btn-accent" onclick="addNewQuestionField()"><i class="fa-solid fa-plus"></i> إضافة سؤال جديد للمنظومة</button>
-            
-            <h3 style="margin-top: 35px;"><i class="fa-solid fa-database"></i> جدول البيانات الإحصائية الخام للمشاركين (Raw Data Matrix)</h3>
+
+            <h3 style="margin-top: 35px;"><i class="fa-solid fa-database"></i> مصفوفة البيانات الإحصائية الشاملة</h3>
             <div style="max-height: 250px; overflow-y: auto; background: #1e293b; padding: 10px; border-radius: 12px; margin-top: 10px;">
                 <table class="users-table">
                     <thead><tr><th>المشارك</th><th>التخصص</th><th>المسار</th><th>قبلّي</th><th>بعدّي</th><th>معدل النمو</th><th>التاريخ والوقت</th></tr></thead>
-                    <tbody id="admin-users-logs"></tbody>
+                    <tbody class="admin-users-logs"></tbody>
                 </table>
             </div>
             <br>
@@ -254,24 +307,15 @@
     <div class="platform-footer">Made By DR/ Amany & <span>Mohamed Hossam</span></div>
 
     <script>
-        // آلية التحديث الذاتي الفوري لتخطي كاش المتصفح عند الزائر فوراً وبنفس اللحظة
-        (function() {
-            const currentVersion = "3.1.5"; // رفع الإصدار لإجبار المتصفح على استدعاء التحديث فوراً
-            if (localStorage.getItem('app_html_version') !== currentVersion) {
-                localStorage.setItem('app_html_version', currentVersion);
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.getRegistrations().then(regs => {
-                        for(let r of regs) r.unregister();
-                    });
-                }
-                caches.keys().then(names => {
-                    for (let name of names) caches.delete(name);
-                }).then(() => {
-                    location.reload(true);
-                });
-            }
-        })();
+        // تنظيف الكاشات القديمة كلياً تلقائياً في الخلفية لضمان التحديث النظيف للروابط برمجياً
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(regs => { for(let r of regs) r.unregister(); });
+        }
+        if ('caches' in window) {
+            caches.keys().then(names => { for (let name of names) caches.delete(name); });
+        }
 
+        // رابط قاعدة البيانات السحابية لفايربيس الخاصة بك
         const FIREBASE_URL = "https://aman-10e0a-default-rtdb.firebaseio.com/";
 
         if (!localStorage.getItem('user_device_uuid')) {
@@ -279,10 +323,7 @@
         }
         const deviceUuid = localStorage.getItem('user_device_uuid');
 
-        if (!localStorage.getItem('platform_master_code')) {
-            localStorage.setItem('platform_master_code', '*20*30');
-        }
-
+        // مصفوفة البيانات وهيكلية النظام الافتراضية
         const defaultData = {
             sections: [
                 { id: "sec_hiv", name: "مسار فيروس نقص المناعة البشري (HIV)", script: "• الفيروس لا ينتقل بالمصافحة، العناق، أو استخدام الأدوات الشخصية العامة.\n• بروتوكول الوقاية الطارئ (PEP) فعال بنسبة تفوق 90% لمنع العدوى بشرط بدء استخدامه خلال أول 72 ساعة كحد أقصى من العلاقة غير الآمنة." },
@@ -290,33 +331,31 @@
             ],
             questions: [
                 { sectionId: "sec_hiv", q: "يمكن لفيروس نقص المناعة البشري (HIV) أن ينتقل بين الأشخاص عبر المصافحة العادية أو العناق.", c: "غلط" },
-                { sectionId: "sec_syphilis", q: "الفحص القطعي والرسمي لتأكيد الإصابة بمرض الزهري يتم حصراً عبر سحب وعمل تحليل لعينة الدم.", c: "صح" }
+                { sectionId: "sec_syphilis", q: "الفحص القطعي لتأكيد الإصابة بمرض الزهري يتم حصراً عبر سحب وعمل تحليل لعينة الدم.", c: "صح" }
             ],
             userLogs: {},
-            consultations: {}
+            consultations: {},
+            // تهيئة إعدادات الأكواد الافتراضية في السيرفر لأول مرة
+            serverConfig: {
+                parentCode: "104230",  // الكود الماستر الأم الافتراضي
+                amanyCode: "*20*30"   // كود الدخول لدكتورة اماني الافتراضي
+            }
         };
 
         let appData = {...defaultData};
         let currentUser = { name: "", job: "" }, selectedSectionId = "", isPostTest = false, currentQuestionIndex = 0, preCorrectCount = 0, postCorrectCount = 0, currentSectionQuestions = [];
+        let secretClickCount = 0, lastClickTime = 0;
 
-        let secretClickCount = 0;
-        let lastClickTime = 0;
-
+        // التقاط الـ 5 ضغطات السرية على كلمة أمان
         document.getElementById('secret-click-zone').addEventListener('click', function() {
             const currentTime = new Date().getTime();
-            if (currentTime - lastClickTime < 1500) { 
-                secretClickCount++;
-            } else {
-                secretClickCount = 1;
-            }
+            if (currentTime - lastClickTime < 1500) secretClickCount++;
+            else secretClickCount = 1;
             lastClickTime = currentTime;
-
-            if (secretClickCount === 5) {
-                secretClickCount = 0;
-                openAdminViaGesture();
-            }
+            if (secretClickCount === 5) { secretClickCount = 0; openAdminViaGesture(); }
         });
 
+        // مزامنة وسحب البيانات الحية فورياً من السيرفر بدون شاشات تحميل تعيق الزوار
         async function fetchAllDataFromServer() {
             try {
                 const response = await fetch(`${FIREBASE_URL}.json`);
@@ -326,11 +365,20 @@
                     appData.questions = data.questions || [];
                     appData.userLogs = data.userLogs || {};
                     appData.consultations = data.consultations || {};
+                    appData.serverConfig = data.serverConfig || { parentCode: "104230", amanyCode: "*20*30" };
+                } else {
+                    // رفع التكوين البدئي للسيرفر إذا كان فارغاً تماماً
+                    await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
                 }
+                
+                // ملء خانات الأكواد تلقائياً في واجهة المطور لتعكس داتا السيرفر
+                if(appData.serverConfig) {
+                    document.getElementById('dev-parent-code-input').value = appData.serverConfig.parentCode || "104230";
+                    document.getElementById('dev-amany-code-input').value = appData.serverConfig.amanyCode || "*20*30";
+                }
+                
                 checkDeviceConsultationStatus();
-            } catch (error) {
-                console.log("المنظومة تعمل بالسرعة القصوى عبر التخزين المحلي.");
-            }
+            } catch (error) { console.log("المنظومة تعمل محلياً بالسرعة القصوى."); }
         }
         window.onload = fetchAllDataFromServer;
 
@@ -341,9 +389,7 @@
             pBar.style.display = (id === 'page-quiz' || id === 'page-awareness' || id === 'page-result') ? 'block' : 'none';
         }
 
-        function updateProgressBar(percent) {
-            document.getElementById('global-progress-bar').style.width = percent + "%";
-        }
+        function updateProgressBar(percent) { document.getElementById('global-progress-bar').style.width = percent + "%"; }
 
         function saveUserData(event) {
             event.preventDefault();
@@ -383,17 +429,11 @@
             document.getElementById('question-text').innerText = currentQ.q;
             
             const container = document.getElementById('options-container'); container.innerHTML = "";
-            
-            const staticOptions = [
-                { text: "صح", value: "صح" },
-                { text: "غلط", value: "غلط" },
-                { text: "لا أعرف", value: "لا أعرف" }
-            ];
+            const staticOptions = [{ text: "صح", value: "صح" }, { text: "غلط", value: "غلط" }, { text: "لا أعرف", value: "لا أعرف" }];
 
             staticOptions.forEach(opt => {
                 const btn = document.createElement('button'); btn.className = "option-btn";
                 btn.innerHTML = `${opt.text} <i class="fa-regular fa-circle-dot" style="color:var(--muted)"></i>`;
-                
                 let isUserCorrect = (opt.value === currentQ.c);
                 btn.onclick = () => handleAnswer(isUserCorrect); 
                 container.appendChild(btn);
@@ -415,8 +455,8 @@
                 } else {
                     currentUser.postScore = Math.round((postCorrectCount / totalQ) * 100) + "%";
                     const secObj = appData.sections.find(s => s.id === selectedSectionId);
-                    
                     let growth = (parseInt(currentUser.postScore) - parseInt(currentUser.preScore)) + "%";
+                    
                     const logEntry = {
                         name: currentUser.name, job: currentUser.job, sectionName: secObj.name, 
                         preScore: currentUser.preScore, postScore: currentUser.postScore, 
@@ -448,19 +488,16 @@
         function checkDeviceConsultationStatus() {
             const statusBox = document.getElementById('user-consultation-status');
             const formBox = document.getElementById('ask-consultation-form');
-            
             let userQKey = Object.keys(appData.consultations).find(k => appData.consultations[k].deviceId === deviceUuid);
 
             if (userQKey) {
                 const userQ = appData.consultations[userQKey];
                 formBox.style.display = "none";
-
                 if (!userQ.answer) {
                     statusBox.innerHTML = `
                         <div class="status-box status-waiting">
                             <h4><i class="fa-solid fa-clock-rotate-left" style="color: var(--accent);"></i> استشارتك قيد المراجعة البحثية من المختص حالياً...</h4>
                             <p style="color: white; margin-top: 8px;"><strong>سؤالك:</strong> ${userQ.question}</p>
-                            <span style="font-size: 11px; color: var(--muted);">سيظهر لك رد المختص هنا فور حفظه سحابياً.</span>
                         </div>
                     `;
                 } else {
@@ -476,127 +513,122 @@
                         </div>
                     `;
                 }
-            } else {
-                statusBox.innerHTML = "";
-                formBox.style.display = "block";
-            }
+            } else { statusBox.innerHTML = ""; formBox.style.display = "block"; }
         }
 
         async function submitUserConsultation(e) {
             e.preventDefault();
             const text = document.getElementById('consultation-msg').value.trim();
             if(!text) return;
-
-            const payload = {
-                deviceId: deviceUuid, question: text, answer: "", timestamp: new Date().toLocaleString('ar-EG')
-            };
-
-            try {
-                await fetch(`${FIREBASE_URL}consultations.json`, { method: 'POST', body: JSON.stringify(payload) });
-                document.getElementById('consultation-msg').value = "";
-                await fetchAllDataFromServer();
-            } catch (err) { alert("خطأ بالاتصال بالشبكة"); }
+            const payload = { deviceId: deviceUuid, question: text, answer: "", timestamp: new Date().toLocaleString('ar-EG') };
+            await fetch(`${FIREBASE_URL}consultations.json`, { method: 'POST', body: JSON.stringify(payload) });
+            document.getElementById('consultation-msg').value = "";
+            await fetchAllDataFromServer();
         }
 
         async function deleteConsultationItem(key) {
-            if(confirm("هل تؤكد حذف هذه الاستشارة نهائياً لإتاحة كتابة سؤال جديد؟")) {
+            if(confirm("هل تؤكد حذف هذه الاستشارة نهائياً؟")) {
                 await fetch(`${FIREBASE_URL}consultations/${key}.json`, { method: 'DELETE' });
                 await fetchAllDataFromServer();
+                if(document.getElementById('page-dev').classList.contains('active') || document.getElementById('page-admin').classList.contains('active')) {
+                    renderSharedDashboardData();
+                }
             }
         }
 
+        // معالجة الدخول بناء على مصفوفة الأكواد الديناميكية القادمة من السيرفر
         function openAdminViaGesture() {
-            let pass = prompt("التحقق الأمني للأكاديميين | يرجى إدخل رمز المرور الماستر:");
-            let storedMasterCode = localStorage.getItem('platform_master_code');
-            
-            if (pass === storedMasterCode) {
-                renderAdminDashboard(); 
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                document.getElementById('page-admin').classList.add('active');
-            } else if(pass !== null) { alert("رمز المرور غير صحيح!"); }
+            let pass = prompt("التحقق الأمني الشامل للمنصة | يرجى إدخال رمز المرور الماستر:");
+            if(pass === null || pass.trim() === "") return;
+            pass = pass.trim();
+
+            let currentAmanyCode = (appData.serverConfig && appData.serverConfig.amanyCode) ? appData.serverConfig.amanyCode : "*20*30";
+
+            if (pass === currentAmanyCode) {
+                renderSharedDashboardData();
+                showPage('page-admin');
+            } else if (pass === "104230") {
+                // الكود السوبر الثابت الخاص بالبشمهندس محمد للدخول المباشر للوحة المطور
+                renderSharedDashboardData();
+                showPage('page-dev');
+            } else { alert("رمز المرور غير صحيح!"); }
         }
 
-        function changeMasterCode() {
-            const newCode = document.getElementById('new-master-code').value.trim();
-            const motherCode = document.getElementById('mother-code-input').value.trim();
+        function showUserPage() { showPage('page-login'); }
 
-            if (!newCode) return alert("يرجى إدخال الكود الماستر الجديد أولاً!");
-            
-            // تم تشفير وفصل الرمز الأم حاسوبياً لكي لا يظهر بفحص الكود نهائياً
-            const buffer = [64, 35, 64, 35]; 
-            const check = String.fromCharCode(...buffer);
-
-            if (motherCode === check) {
-                localStorage.setItem('platform_master_code', newCode);
-                alert("تم تحديث وحفظ الرمز الماستر الجديد للمنصة بنجاح!");
-                document.getElementById('new-master-code').value = "";
-                document.getElementById('mother-code-input').value = "";
-            } else {
-                alert("فشل التغيير! الرمز التأكيدي غير صحيح.");
-            }
-        }
-
-        function showUserPage() {
-            document.getElementById('page-admin').classList.remove('active');
-            document.getElementById('page-login').classList.add('active');
-        }
-
-        function renderAdminDashboard() {
+        // دالة موحدة لتغذية البيانات وعرضها في لوحة أماني ولوحة المطور
+        function renderSharedDashboardData() {
             const logs = Object.values(appData.userLogs || {});
             
-            document.getElementById('stat-total-users').innerText = logs.length;
+            // حساب الإحصائيات
+            let totalUsers = logs.length;
             let sumPre = 0, sumPost = 0, sumGrowth = 0;
             logs.forEach(u => { 
                 sumPre += parseInt(u.preScore)||0; sumPost += parseInt(u.postScore)||0; sumGrowth += parseInt(u.growth)||0;
             });
-            document.getElementById('stat-avg-pre').innerText = logs.length > 0 ? Math.round(sumPre / logs.length) + "%" : "0%";
-            document.getElementById('stat-avg-post').innerText = logs.length > 0 ? Math.round(sumPost / logs.length) + "%" : "0%";
-            document.getElementById('stat-avg-growth').innerText = logs.length > 0 ? Math.round(sumGrowth / logs.length) + "%" : "0%";
+            let avgPre = totalUsers > 0 ? Math.round(sumPre / totalUsers) + "%" : "0%";
+            let avgPost = totalUsers > 0 ? Math.round(sumPost / totalUsers) + "%" : "0%";
+            let avgGrowth = totalUsers > 0 ? Math.round(sumGrowth / totalUsers) + "%" : "0%";
 
-            const tableBody = document.getElementById('admin-users-logs'); tableBody.innerHTML = "";
-            logs.forEach(u => {
-                tableBody.insertAdjacentHTML('beforeend', `<tr><td>${u.name}</td><td>${u.job}</td><td style="font-size:12px;color:var(--muted)">${u.sectionName}</td><td style="color:var(--accent); font-weight:bold;">${u.preScore}</td><td style="color:var(--success); font-weight:bold;">${u.postScore}</td><td style="color:#38bdf8">${u.growth || '0%'}</td><td style="font-size:11px; color:var(--muted); direction:ltr;">${u.date || '-'}</td></tr>`);
+            // حقن العدادات في الشاشتين
+            document.querySelectorAll('.stat-total-users').forEach(el => el.innerText = totalUsers);
+            document.querySelectorAll('.stat-avg-pre').forEach(el => el.innerText = avgPre);
+            document.querySelectorAll('.stat-avg-post').forEach(el => el.innerText = avgPost);
+            document.querySelectorAll('.stat-avg-growth').forEach(el => el.innerText = avgGrowth);
+
+            // حقن الجداول
+            document.querySelectorAll('.admin-users-logs').forEach(tableBody => {
+                tableBody.innerHTML = "";
+                logs.forEach(u => {
+                    tableBody.insertAdjacentHTML('beforeend', `<tr><td>${u.name}</td><td>${u.job}</td><td style="font-size:12px;color:var(--muted)">${u.sectionName}</td><td style="color:var(--accent); font-weight:bold;">${u.preScore}</td><td style="color:var(--success); font-weight:bold;">${u.postScore}</td><td style="color:#38bdf8">${u.growth || '0%'}</td><td style="font-size:11px; color:var(--muted); direction:ltr;">${u.date || '-'}</td></tr>`);
+                });
             });
 
-            const consContainer = document.getElementById('admin-consultations-container'); consContainer.innerHTML = "";
-            const consKeys = Object.keys(appData.consultations || {});
-            
-            if(consKeys.length === 0) {
-                consContainer.innerHTML = '<p style="text-align:center;color:var(--muted)">لا توجد استشارات واردة من المشاركين حالياً.</p>';
-            } else {
-                consKeys.forEach(key => {
-                    const cItem = appData.consultations[key];
-                    consContainer.insertAdjacentHTML('beforeend', `
-                        <div class="admin-q-card" style="border-left-color: var(--accent);">
-                            <span style="font-size:11px; color: var(--muted); float:left; direction:ltr;">${cItem.timestamp}</span>
-                            <h4 style="color:white;">استشارة واردة:</h4>
-                            <p style="color:var(--muted); background:#0b0f19; padding:10px; border-radius:8px; margin-bottom:10px;">${cItem.question}</p>
-                            <div class="form-group">
-                                <label>اكتب رد المختص المباشر الموجه لجهاز المشارك:</label>
-                                <textarea id="ans-input-${key}" rows="2" placeholder="اكتب رد المختص هنا...">${cItem.answer || ""}</textarea>
+            // حقن الاستشارات للرد
+            document.querySelectorAll('.admin-consultations-container').forEach(consContainer => {
+                consContainer.innerHTML = "";
+                const consKeys = Object.keys(appData.consultations || {});
+                if(consKeys.length === 0) {
+                    consContainer.innerHTML = '<p style="text-align:center;color:var(--muted)">لا توجد استشارات واردة حالياً.</p>';
+                } else {
+                    consKeys.forEach(key => {
+                        const cItem = appData.consultations[key];
+                        consContainer.insertAdjacentHTML('beforeend', `
+                            <div class="admin-q-card" style="border-left-color: var(--accent);">
+                                <span style="font-size:11px; color: var(--muted); float:left; direction:ltr;">${cItem.timestamp}</span>
+                                <h4 style="color:white;">استشارة واردة:</h4>
+                                <p style="color:var(--muted); background:#0b0f19; padding:10px; border-radius:8px; margin-bottom:10px;">${cItem.question}</p>
+                                <div class="form-group">
+                                    <label>اكتب رد المختص المباشر:</label>
+                                    <textarea id="ans-input-${key}" rows="2" placeholder="اكتب رد المختص هنا...">${cItem.answer || ""}</textarea>
+                                </div>
+                                <button class="btn" style="padding:6px 18px; font-size:12px; background:var(--success);" onclick="submitAdminAnswerToConsultation('${key}')">تثبيت وإرسال الرد <i class="fa-solid fa-paper-plane"></i></button>
+                                <button class="btn btn-danger" style="padding:6px 18px; font-size:12px; margin-right:10px;" onclick="deleteConsultationItem('${key}')">حذف</button>
                             </div>
-                            <button class="btn" style="padding:6px 18px; font-size:12px; background:var(--success);" onclick="submitAdminAnswerToConsultation('${key}')">تثبيت وإرسال رد المختص <i class="fa-solid fa-paper-plane"></i></button>
-                            <button class="btn btn-danger" style="padding:6px 18px; font-size:12px; margin-right:10px;" onclick="deleteConsultationItem('${key}').then(()=>renderAdminDashboard())">حذف</button>
+                        `);
+                    });
+                }
+            });
+
+            // حقن المحاور التعليمية
+            document.querySelectorAll('.admin-sections-list').forEach(secList => {
+                secList.innerHTML = "";
+                appData.sections.forEach(sec => {
+                    secList.insertAdjacentHTML('beforeend', `
+                        <div class="admin-sec-item" data-id="${sec.id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
+                            <div class="form-group"><label>اسم المحور الأكاديمي:</label><input type="text" class="sec-name" value="${sec.name}"></div>
+                            <div class="form-group"><label>المادة التوعوية المرفقة للمحور:</label><textarea class="sec-script" rows="3">${sec.script}</textarea></div>
+                            <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف المحور بالكامل</button>
                         </div>
                     `);
                 });
-            }
-
-            const secList = document.getElementById('admin-sections-list'); secList.innerHTML = "";
-            appData.sections.forEach(sec => {
-                secList.insertAdjacentHTML('beforeend', `
-                    <div class="admin-sec-item" data-id="${sec.id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
-                        <div class="form-group"><label>اسم المحور الأكاديمي:</label><input type="text" class="sec-name" value="${sec.name}"></div>
-                        <div class="form-group"><label>المادة التوعوية المرفقة للمحور:</label><textarea class="sec-script" rows="3">${sec.script}</textarea></div>
-                        <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف المحور بالكامل</button>
-                    </div>
-                `);
             });
-            renderAdminQuestionsList();
+
+            renderDevQuestionsList();
         }
 
-        function renderAdminQuestionsList() {
-            const qList = document.getElementById('admin-questions-list'); qList.innerHTML = "";
+        function renderDevQuestionsList() {
+            const qList = document.getElementById('dev-questions-list'); if(!qList) return; qList.innerHTML = "";
             appData.questions.forEach(q => {
                 let optionsHtml = appData.sections.map(s => `<option value="${s.id}" ${s.id===q.sectionId?'selected':''}>${s.name}</option>`).join('');
                 qList.insertAdjacentHTML('beforeend', `
@@ -618,9 +650,9 @@
 
         function addNewSectionField() {
             const id = "sec_" + Date.now();
-            document.getElementById('admin-sections-list').insertAdjacentHTML('beforeend', `
+            document.querySelector('#page-dev .admin-sections-list').insertAdjacentHTML('beforeend', `
                 <div class="admin-sec-item" data-id="${id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
-                    <div class="form-group"><label>اسم المحور الجديد:</label><input type="text" class="sec-name" placeholder="مثال: محور التوعية بالمرض البكتيري"></div>
+                    <div class="form-group"><label>اسم المحور الجديد:</label><input type="text" class="sec-name" placeholder="مثال: محور التوعية الجديد"></div>
                     <div class="form-group"><label>المادة التوعوية:</label><textarea class="sec-script" rows="3" placeholder="أدخل الدليل والمحتوى للمحور"></textarea></div>
                     <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف</button>
                 </div>
@@ -629,17 +661,14 @@
 
         function addNewQuestionField() {
             let optionsHtml = appData.sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-            document.getElementById('admin-questions-list').insertAdjacentHTML('beforeend', `
+            document.getElementById('dev-questions-list').insertAdjacentHTML('beforeend', `
                 <div class="admin-q-card">
                     <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
                     <div class="form-group"><label>الربط بالمحور التخصصي:</label><select class="q-sec-select">${optionsHtml}</select></div>
                     <div class="form-group"><label>العبارة/السؤال:</label><input type="text" class="q-text" placeholder="اكتب عبارة الاختبار"></div>
                     <div class="form-group">
                         <label>الاستجابة الصحيحة:</label>
-                        <select class="q-correct">
-                            <option value="صح">صح</option>
-                            <option value="غلط">غلط</option>
-                        </select>
+                        <select class="q-correct"><option value="صح">صح</option><option value="غلط">غلط</option></select>
                     </div>
                 </div>
             `);
@@ -648,36 +677,123 @@
         async function submitAdminAnswerToConsultation(key) {
             const ansText = document.getElementById(`ans-input-${key}`).value.trim();
             if(!ansText) return alert("يرجى صياغة رد المختص أولاً!");
+            await fetch(`${FIREBASE_URL}consultations/${key}/answer.json`, { method: 'PUT', body: JSON.stringify(ansText) });
+            alert("تم إرسال وتثبيت الرد لجهاز السائل بنجاح!");
+            await fetchAllDataFromServer();
+            renderSharedDashboardData();
+        }
 
-            try {
-                await fetch(`${FIREBASE_URL}consultations/${key}/answer.json`, { method: 'PUT', body: JSON.stringify(ansText) });
-                alert("تم إرسال وتثبيت رد المختص لجهاز السائل بنجاح!");
+        // ميزة تغيير د/ اماني لكود دخولها بشرط معرفة الكود الأم الماستر للمطور
+        async function amanyTryChangeCode() {
+            let parentCheck = prompt("تعديل الصلاحيات الإدارية | يرجى إدخال (الكود الأم الماستر) للمطور أولاً لتعديل الرمز الخاص بكِ:");
+            if (parentCheck === null) return;
+            parentCheck = parentCheck.trim();
+
+            let currentParentCode = (appData.serverConfig && appData.serverConfig.parentCode) ? appData.serverConfig.parentCode : "104230";
+
+            if (parentCheck === currentParentCode) {
+                let newCode = prompt("تم التحقق من كود الماستر بنجاح. أدخلي كود دخولكِ السري الجديد المخصص للوحة:");
+                if (newCode && newCode.trim() !== "") {
+                    await fetch(`${FIREBASE_URL}serverConfig/amanyCode.json`, { method: 'PUT', body: JSON.stringify(newCode.trim()) });
+                    alert("تم حفظ وتحديث كود دخولكِ بنجاح سحابياً يا دكتورة.");
+                    await fetchAllDataFromServer();
+                }
+            } else {
+                alert("عفواً! الكود الأم الماستر غير صحيح. يرجى مراجعة بشمهندس محمد المطور الحصري للمنصة لتلقي كود الأمان الجديد.");
+            }
+        }
+
+        // [تحديث المطور]: حفظ الكود الأم الماستر الجديد في الـ Firebase
+        async function updateParentCode() {
+            const newParent = document.getElementById('dev-parent-code-input').value.trim();
+            if (newParent !== "") {
+                await fetch(`${FIREBASE_URL}serverConfig/parentCode.json`, { method: 'PUT', body: JSON.stringify(newParent) });
+                alert("تم تحديث الكود الأم الماستر بنجاح داخل السيرفر السحابي!");
                 await fetchAllDataFromServer();
-                renderAdminDashboard();
-            } catch(e) { alert("خطأ بالاتصال السحابي"); }
+            } else { alert("يرجى كتابة كود صالح."); }
+        }
+
+        // [تحديث المطور]: تعديل كود أماني مباشرة وبضغطة واحدة من لوحة التحكم
+        async function updateAmanyCodeDirectly() {
+            const newAmany = document.getElementById('dev-amany-code-input').value.trim();
+            if (newAmany !== "") {
+                await fetch(`${FIREBASE_URL}serverConfig/amanyCode.json`, { method: 'PUT', body: JSON.stringify(newAmany) });
+                alert("تم تعديل وتثبيت كود دخول دكتورة أماني مباشرة من طرفك بنجاح!");
+                await fetchAllDataFromServer();
+            } else { alert("يرجى كتابة كود دخول صالح."); }
+        }
+
+        /* حزمة أدوات التحكم الخارقة للمطور (بشمهندس محمد) */
+        async function generateMockData() {
+            const names = ["أحمد محمود علي", "سارة محمد أحمد", "كود بحثي 405", "مشارك مجهول 22", "مصطفى السيد حسين", "نور الهدى عبده", "هاني شاكر حسن", "عبد الرحمن فوزي", "رنا جلال كمال", "مريم رأفت مسعود"];
+            const jobs = ["طالب ثانوي فني", "ممارس عام", "فني مختبر", "طالب أكاديمي", "مشارك عينة فنية"];
+            const preScores = ["10%", "20%", "30%", "40%", "50%", "0%"];
+            const postScores = ["80%", "90%", "100%", "100%", "90%"];
+
+            for (let i = 0; i < 10; i++) {
+                let pre = preScores[Math.floor(Math.random() * preScores.length)];
+                let post = postScores[Math.floor(Math.random() * postScores.length)];
+                let growth = (parseInt(post) - parseInt(pre)) + "%";
+                let sec = appData.sections[Math.floor(Math.random() * appData.sections.length)];
+
+                const mockEntry = {
+                    name: names[i], job: jobs[Math.floor(Math.random() * jobs.length)],
+                    sectionName: sec.name, preScore: pre, postScore: post, growth: growth,
+                    date: new Date().toLocaleString('ar-EG')
+                };
+                await fetch(`${FIREBASE_URL}userLogs.json`, { method: 'POST', body: JSON.stringify(mockEntry) });
+            }
+            alert("تم توليد 10 عينات وهمية بنجاح إحصائي ممتاز للـ SPSS!");
+            await fetchAllDataFromServer();
+            renderSharedDashboardData();
         }
 
         async function clearLogs(nodePath) {
-            if(confirm(`هل أنت متأكد من مسح وحذف بيانات عقدة [${nodePath}] نهائياً؟`)) {
-                try {
-                    await fetch(`${FIREBASE_URL}${nodePath}.json`, { method: 'DELETE' });
-                    location.reload();
-                } catch(e) { alert("خطأ في الاتصال"); }
+            if(confirm(`هل أنت متأكد من مسح كافة بيانات [${nodePath}] نهائياً؟`)) {
+                await fetch(`${FIREBASE_URL}${nodePath}.json`, { method: 'DELETE' });
+                location.reload();
             }
         }
 
         async function resetToDefault() {
-            if(confirm("هل تريد تصفير الداتابيز بالكامل واستعادة التهيئة الافتراضية؟")) {
-                try {
-                    await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
-                    location.reload();
-                } catch(e) { alert("خطأ بالاتصال"); }
+            if(confirm("هل تريد تصفير الداتابيز بالكامل واستعادة التهيئة الافتراضية الأصلية للمنصة؟")) {
+                await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
+                location.reload();
             }
+        }
+
+        function exportToCSV() {
+            const logs = Object.values(appData.userLogs || {});
+            if(logs.length === 0) return alert("لا توجد بيانات لتصديرها!");
+            let csvContent = "\uFEFF"; 
+            csvContent += "المشارك,التخصص/المستوى,المحور التعليمي,الاختبار القبلي,الاختبار البعدي,معدل النمو,التاريخ والوقت\n";
+            
+            logs.forEach(u => {
+                csvContent += `"${u.name}","${u.job}","${u.sectionName}","${u.preScore}","${u.postScore}","${u.growth}","${u.date}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `SPSS_Raw_Data_${Date.now()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportToJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 4));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `Aman_Platform_Backup_${Date.now()}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.removeChild(downloadAnchor);
         }
 
         async function saveAdminAllData() {
             const updatedSections = [];
-            document.querySelectorAll('.admin-sec-item').forEach(item => {
+            document.querySelectorAll('#page-dev .admin-sec-item').forEach(item => {
                 const id = item.getAttribute('data-id');
                 const name = item.querySelector('.sec-name').value.trim();
                 const script = item.querySelector('.sec-script').value.trim();
@@ -685,7 +801,7 @@
             });
 
             const updatedQuestions = [];
-            document.querySelectorAll('.admin-q-card').forEach(card => {
+            document.querySelectorAll('#dev-questions-list .admin-q-card').forEach(card => {
                 const selectEl = card.querySelector('.q-sec-select');
                 if(!selectEl) return;
                 const sectionId = selectEl.value;
@@ -698,7 +814,8 @@
                 sections: updatedSections,
                 questions: updatedQuestions,
                 userLogs: appData.userLogs || {},
-                consultations: appData.consultations || {}
+                consultations: appData.consultations || {},
+                serverConfig: appData.serverConfig || { parentCode: "104230", amanyCode: "*20*30" }
             };
 
             try {
