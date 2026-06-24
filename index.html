@@ -41,30 +41,30 @@
         #maintenance-screen p { font-size: 16px; color: var(--muted); }
 
         .progress-container { width: 100%; background: #24324d; height: 8px; border-radius: 10px; margin-bottom: 30px; display: none; overflow: hidden; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--success)); width: 0%; transition: width 0.4s ease; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--success)); width: 0%; transition: width 0.3s ease; }
 
         h1, h2, h3, h4 { margin-bottom: 20px; font-weight: 700; }
         p { line-height: 1.7; color: var(--muted); }
         
-        .btn { background: var(--primary); color: white; border: none; padding: 14px 30px; font-size: 15px; font-weight: bold; border-radius: 50px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; margin-top: 15px; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3); }
-        .btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn { background: var(--primary); color: white; border: none; padding: 14px 30px; font-size: 15px; font-weight: bold; border-radius: 50px; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 10px; margin-top: 15px; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3); touch-action: manipulation; }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
         .btn-danger { background: var(--danger); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
         .btn-danger:hover { background: #b91c1c; }
         .btn-accent { background: var(--accent); color: #000; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
         .btn-accent:hover { background: #d97706; }
         .btn-block { width: 100%; justify-content: center; }
         
-        .page { display: none; animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .page { display: none; animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
         .page.active { display: block; }
         
         .sections-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 25px; }
-        .section-card { background: #1e293b; padding: 30px 20px; border-radius: 20px; border: 2px solid transparent; cursor: pointer; transition: 0.3s; text-align: center; }
-        .section-card:hover { border-color: var(--primary); transform: translateY(-5px); background: #24324d; }
+        .section-card { background: #1e293b; padding: 30px 20px; border-radius: 20px; border: 2px solid transparent; cursor: pointer; transition: 0.2s; text-align: center; }
+        .section-card:hover { border-color: var(--primary); transform: translateY(-3px); background: #24324d; }
         .section-card i { font-size: 45px; color: var(--accent); margin-bottom: 15px; }
         
         .options-grid { display: grid; gap: 14px; margin-top: 25px; }
-        .option-btn { background: #1e293b; color: var(--text); border: 2px solid rgba(255,255,255,0.05); padding: 18px; border-radius: 16px; text-align: right; font-size: 16px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
-        .option-btn:hover { background: #24324d; border-color: var(--primary); padding-right: 25px; }
+        .option-btn { background: #1e293b; color: var(--text); border: 2px solid rgba(255,255,255,0.05); padding: 18px; border-radius: 16px; text-align: right; font-size: 16px; cursor: pointer; transition: 0.15s; display: flex; align-items: center; justify-content: space-between; touch-action: manipulation; }
+        .option-btn:hover { background: #24324d; border-color: var(--primary); padding-right: 22px; }
         
         .awareness-content { background: rgba(13, 148, 136, 0.08); border-right: 4px solid var(--primary); padding: 25px; border-radius: 12px; margin: 25px 0; line-height: 1.9; white-space: pre-line; font-size: 17px; }
         
@@ -104,8 +104,8 @@
         .platform-footer span { color: var(--accent); }
         .secret-trigger { cursor: default; user-select: none; }
 
-        @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.6; } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.6; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.6; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -223,7 +223,7 @@
             <button class="btn btn-accent" style="margin-bottom: 30px;" onclick="addNewSectionField()"><i class="fa-solid fa-plus"></i> إضافة محور/سكشن جديد</button>
 
             <h3 style="margin-top: 15px; color: var(--accent);"><i class="fa-solid fa-file-medical-question"></i> بنود عبارات الأسئلة والتقييم (صح / غلط)</h3>
-            <div id="amany-questions-list" style="margin-bottom: 15px;"></div>
+            <div class="amany-questions-list" id="amany-questions-list" style="margin-bottom: 15px;"></div>
             <button class="btn btn-accent" style="margin-bottom: 35px;" onclick="addNewQuestionField()"><i class="fa-solid fa-plus"></i> إضافة سؤال قياسي جديد</button>
 
             <h3 style="margin-top: 20px;"><i class="fa-solid fa-database"></i> جدول البيانات الإحصائية الخام (Raw Data Matrix)</h3>
@@ -302,7 +302,7 @@
             <button class="btn btn-accent" onclick="addNewSectionField()"><i class="fa-solid fa-plus"></i> إضافة محور/سكشن جديد</button>
 
             <h3 style="margin-top:30px;"><i class="fa-solid fa-file-medical-question"></i> بنود العبارات والأسئلة القياسية</h3>
-            <div id="dev-questions-list"></div>
+            <div class="amany-questions-list" id="dev-questions-list"></div>
             <button class="btn btn-accent" onclick="addNewQuestionField()"><i class="fa-solid fa-plus"></i> إضافة سؤال جديد للمنظومة</button>
 
             <h3 style="margin-top: 35px;"><i class="fa-solid fa-database"></i> مصفوفة البيانات الإحصائية الشاملة</h3>
@@ -342,12 +342,7 @@
             ],
             userLogs: {},
             consultations: {},
-            serverConfig: {
-                devCode: "104230",
-                parentCode: "104230",
-                amanyCode: "*20*30",
-                isLocked: false
-            }
+            serverConfig: { devCode: "104230", parentCode: "104230", amanyCode: "*20*30", isLocked: false }
         };
 
         let appData = {...defaultData};
@@ -364,40 +359,50 @@
         });
 
         async function fetchAllDataFromServer() {
+            if (document.getElementById('page-quiz').classList.contains('active')) return;
+
             try {
                 const response = await fetch(`${FIREBASE_URL}.json`);
+                if (!response.ok) return;
                 const data = await response.json();
+                
                 if (data) {
                     appData.sections = data.sections || [];
                     appData.questions = data.questions || [];
                     appData.userLogs = data.userLogs || {};
                     appData.consultations = data.consultations || {};
                     appData.serverConfig = data.serverConfig || { devCode: "104230", parentCode: "104230", amanyCode: "*20*30", isLocked: false };
-                } else {
-                    await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
                 }
-                
+
                 handleLockMechanism();
 
-                if(appData.serverConfig) {
-                    const devCodeInput = document.getElementById('dev-my-own-code');
-                    const parentCodeInput = document.getElementById('dev-parent-code-input');
-                    const amanyCodeInput = document.getElementById('dev-amany-code-input');
+                const activeEl = document.activeElement;
+                const tag = activeEl ? activeEl.tagName.toLowerCase() : "";
+                if (tag !== 'input' && tag !== 'textarea' && tag !== 'select') {
+                    if(appData.serverConfig) {
+                        const devCodeInput = document.getElementById('dev-my-own-code');
+                        const parentCodeInput = document.getElementById('dev-parent-code-input');
+                        const amanyCodeInput = document.getElementById('dev-amany-code-input');
 
-                    if (document.activeElement !== devCodeInput) devCodeInput.value = appData.serverConfig.devCode || "104230";
-                    if (document.activeElement !== parentCodeInput) parentCodeInput.value = appData.serverConfig.parentCode || "104230";
-                    if (document.activeElement !== amanyCodeInput) amanyCodeInput.value = appData.serverConfig.amanyCode || "*20*30";
-                    
-                    const lockBtn = document.getElementById('dev-toggle-lock-btn');
-                    if(appData.serverConfig.isLocked) {
-                        lockBtn.innerHTML = 'تعطيل وضع التحديث وتشغيل الموقع فوراً للكل <i class="fa-solid fa-play"></i>';
-                        lockBtn.style.background = "var(--success)";
-                    } else {
-                        lockBtn.innerHTML = 'إغلاق الموقع وتشغيل شاشة (برجاء الانتظار يتم التحديث الآن) <i class="fa-solid fa-power-off"></i>';
-                        lockBtn.style.background = "var(--danger)";
+                        if (devCodeInput) devCodeInput.value = appData.serverConfig.devCode || "104230";
+                        if (parentCodeInput) parentCodeInput.value = appData.serverConfig.parentCode || "104230";
+                        if (amanyCodeInput) amanyCodeInput.value = appData.serverConfig.amanyCode || "*20*30";
+                        
+                        const lockBtn = document.getElementById('dev-toggle-lock-btn');
+                        if(lockBtn) {
+                            if(appData.serverConfig.isLocked) {
+                                lockBtn.innerHTML = 'تعطيل وضع التحديث وتشغيل الموقع فوراً للكل <i class="fa-solid fa-play"></i>';
+                                lockBtn.style.background = "var(--success)";
+                            } else {
+                                lockBtn.innerHTML = 'إغلاق الموقع وتشغيل شاشة (برجاء الانتظار يتم التحديث الآن) <i class="fa-solid fa-power-off"></i>';
+                                lockBtn.style.background = "var(--danger)";
+                            }
+                        }
+                    }
+                    if (document.getElementById('page-admin').classList.contains('active') || document.getElementById('page-dev').classList.contains('active')) {
+                        renderSharedDashboardData();
                     }
                 }
-                
                 checkDeviceConsultationStatus();
             } catch (error) { console.log("السيستم يعمل محلياً بسرعة قصوى."); }
         }
@@ -408,11 +413,7 @@
         function handleLockMechanism() {
             const mScreen = document.getElementById('maintenance-screen');
             if (appData.serverConfig && appData.serverConfig.isLocked === true) {
-                if (!isDevActive) {
-                    mScreen.style.display = "flex";
-                } else {
-                    mScreen.style.display = "none";
-                }
+                mScreen.style.display = isDevActive ? "none" : "flex";
             } else {
                 mScreen.style.display = "none";
             }
@@ -480,7 +481,7 @@
                 const btn = document.createElement('button'); btn.className = "option-btn";
                 btn.innerHTML = `${opt.text} <i class="fa-regular fa-circle-dot" style="color:var(--muted)"></i>`;
                 let isUserCorrect = (opt.value === currentQ.c);
-                btn.onclick = () => handleAnswer(isUserCorrect); 
+                btn.addEventListener('pointerdown', () => handleAnswer(isUserCorrect)); 
                 container.appendChild(btn);
             });
         }
@@ -533,6 +534,7 @@
         function checkDeviceConsultationStatus() {
             const statusBox = document.getElementById('user-consultation-status');
             const formBox = document.getElementById('ask-consultation-form');
+            if(!statusBox || !formBox) return;
             let userQKey = Object.keys(appData.consultations).find(k => appData.consultations[k].deviceId === deviceUuid);
 
             if (userQKey) {
@@ -563,19 +565,31 @@
 
         async function submitUserConsultation(e) {
             e.preventDefault();
-            const text = document.getElementById('consultation-msg').value.trim();
+            const textInput = document.getElementById('consultation-msg');
+            const text = textInput.value.trim();
             if(!text) return;
+            
+            const tempKey = 'temp_' + Date.now();
             const payload = { deviceId: deviceUuid, question: text, answer: "", timestamp: new Date().toLocaleString('ar-EG') };
-            await fetch(`${FIREBASE_URL}consultations.json`, { method: 'POST', body: JSON.stringify(payload) });
-            document.getElementById('consultation-msg').value = "";
-            await fetchAllDataFromServer();
+            
+            appData.consultations[tempKey] = payload;
+            textInput.value = "";
+            checkDeviceConsultationStatus();
+
+            fetch(`${FIREBASE_URL}consultations.json`, { method: 'POST', body: JSON.stringify(payload) })
+            .then(() => {
+                delete appData.consultations[tempKey];
+                fetchAllDataFromServer();
+            });
         }
 
         async function deleteConsultationItem(key) {
             if(confirm("هل تؤكد حذف هذه الاستشارة نهائياً؟")) {
+                delete appData.consultations[key];
+                checkDeviceConsultationStatus();
+                renderSharedDashboardData();
                 await fetch(`${FIREBASE_URL}consultations/${key}.json`, { method: 'DELETE' });
                 await fetchAllDataFromServer();
-                renderSharedDashboardData();
             }
         }
 
@@ -629,6 +643,7 @@
                 } else {
                     consKeys.forEach(key => {
                         const cItem = appData.consultations[key];
+                        if (key.startsWith('temp_')) return;
                         consContainer.insertAdjacentHTML('beforeend', `
                             <div class="admin-q-card" style="border-left-color: var(--accent);">
                                 <span style="font-size:11px; color: var(--muted); float:left; direction:ltr;">${cItem.timestamp}</span>
@@ -646,51 +661,53 @@
                 }
             });
 
-            document.querySelectorAll('.admin-sections-list').forEach(secList => {
-                secList.innerHTML = "";
-                appData.sections.forEach(sec => {
-                    secList.insertAdjacentHTML('beforeend', `
-                        <div class="admin-sec-item" data-id="${sec.id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
-                            <div class="form-group"><label>اسم المحور الأكاديمي:</label><input type="text" class="sec-name" value="${sec.name}"></div>
-                            <div class="form-group"><label>المادة التوعوية المرفقة للمحور:</label><textarea class="sec-script" rows="3">${sec.script}</textarea></div>
-                            <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف المحور بالكامل</button>
-                        </div>
-                    `);
-                });
-            });
-
-            renderDevQuestionsList();
+            const activePage = document.querySelector('.page.active');
+            if (activePage) {
+                const secList = activePage.querySelector('.admin-sections-list');
+                if (secList && secList.children.length === 0) {
+                    appData.sections.forEach(sec => {
+                        secList.insertAdjacentHTML('beforeend', `
+                            <div class="admin-sec-item" data-id="${sec.id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
+                                <div class="form-group"><label>اسم المحور الأكاديمي:</label><input type="text" class="sec-name" value="${sec.name}"></div>
+                                <div class="form-group"><label>المادة التوعوية المرفقة للمحور:</label><textarea class="sec-script" rows="3">${sec.script}</textarea></div>
+                                <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف المحور بالكامل</button>
+                            </div>
+                        `);
+                    });
+                }
+                renderQuestionsListForActivePage(activePage);
+            }
         }
 
-        function renderDevQuestionsList() {
-            const qContainers = [document.getElementById('dev-questions-list'), document.getElementById('amany-questions-list')];
+        function renderQuestionsListForActivePage(activePage) {
+            const qList = activePage.querySelector('.amany-questions-list');
+            if (!qList || qList.children.length > 0) return; 
             
-            qContainers.forEach(qList => {
-                if(!qList) return; 
-                qList.innerHTML = "";
-                appData.questions.forEach(q => {
-                    let optionsHtml = appData.sections.map(s => `<option value="${s.id}" ${s.id===q.sectionId?'selected':''}>${s.name}</option>`).join('');
-                    qList.insertAdjacentHTML('beforeend', `
-                        <div class="admin-q-card">
-                            <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
-                            <div class="form-group"><label>الربط بمتغير المحور:</label><select class="q-sec-select">${optionsHtml}</select></div>
-                            <div class="form-group"><label>نص عبارة السؤال القياسي:</label><input type="text" class="q-text" value="${q.q}"></div>
-                            <div class="form-group">
-                                <label>الاستجابة الصحيحة علمياً:</label>
-                                <select class="q-correct">
-                                    <option value="صح" ${q.c === 'صح' ? 'selected' : ''}>صح</option>
-                                    <option value="غلط" ${q.c === 'غلط' ? 'selected' : ''}>غلط</option>
-                                </select>
-                            </div>
+            appData.questions.forEach(q => {
+                let optionsHtml = appData.sections.map(s => `<option value="${s.id}" ${s.id===q.sectionId?'selected':''}>${s.name}</option>`).join('');
+                qList.insertAdjacentHTML('beforeend', `
+                    <div class="admin-q-card">
+                        <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
+                        <div class="form-group"><label>الربط بمتغير المحور:</label><select class="q-sec-select">${optionsHtml}</select></div>
+                        <div class="form-group"><label>نص عبارة السؤال القياسي:</label><input type="text" class="q-text" value="${q.q}"></div>
+                        <div class="form-group">
+                            <label>الاستجابة الصحيحة علمياً:</label>
+                            <select class="q-correct">
+                                <option value="صح" ${q.c === 'صح' ? 'selected' : ''}>صح</option>
+                                <option value="غلط" ${q.c === 'غلط' ? 'selected' : ''}>غلط</option>
+                            </select>
                         </div>
-                    `);
-                });
+                    </div>
+                `);
             });
         }
 
         function addNewSectionField() {
             const id = "sec_" + Date.now();
-            document.querySelectorAll('.admin-sections-list').forEach(list => {
+            const activePage = document.querySelector('.page.active');
+            if(!activePage) return;
+            const list = activePage.querySelector('.admin-sections-list');
+            if(list) {
                 list.insertAdjacentHTML('beforeend', `
                     <div class="admin-sec-item" data-id="${id}" style="margin-bottom:20px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:15px;">
                         <div class="form-group"><label>اسم المحور الجديد:</label><input type="text" class="sec-name" placeholder="مثال: محور التوعية الجديد"></div>
@@ -698,37 +715,38 @@
                         <button class="btn btn-danger" style="padding:6px 15px; font-size:12px; margin:0;" onclick="this.parentElement.remove()">حذف</button>
                     </div>
                 `);
-            });
+            }
         }
 
         function addNewQuestionField() {
+            const activePage = document.querySelector('.page.active');
+            if(!activePage) return;
+            const el = activePage.querySelector('.amany-questions-list');
             let optionsHtml = appData.sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-            const containers = ['dev-questions-list', 'amany-questions-list'];
-            containers.forEach(cId => {
-                const el = document.getElementById(cId);
-                if(el) {
-                    el.insertAdjacentHTML('beforeend', `
-                        <div class="admin-q-card">
-                            <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
-                            <div class="form-group"><label>الربط بالمحور التخصصي:</label><select class="q-sec-select">${optionsHtml}</select></div>
-                            <div class="form-group"><label>العبارة/السؤال:</label><input type="text" class="q-text" placeholder="اكتب عبارة الاختبار"></div>
-                            <div class="form-group">
-                                <label>الاستجابة الصحيحة:</label>
-                                <select class="q-correct"><option value="صح">صح</option><option value="غلط">غلط</option></select>
-                            </div>
+            if(el) {
+                el.insertAdjacentHTML('beforeend', `
+                    <div class="admin-q-card">
+                        <button class="remove-q-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
+                        <div class="form-group"><label>الربط بالمحور التخصصي:</label><select class="q-sec-select">${optionsHtml}</select></div>
+                        <div class="form-group"><label>العبارة/السؤال:</label><input type="text" class="q-text" placeholder="اكتب عبارة الاختبار"></div>
+                        <div class="form-group">
+                            <label>الاستجابة الصحيحة:</label>
+                            <select class="q-correct"><option value="صح">صح</option><option value="غلط">غلط</option></select>
                         </div>
-                    `);
-                }
-            });
+                    </div>
+                `);
+                const lastCard = el.lastElementChild;
+                if(lastCard) lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
 
         async function submitAdminAnswerToConsultation(key) {
             const ansText = document.getElementById(`ans-input-${key}`).value.trim();
             if(!ansText) return alert("يرجى صياغة رد المختص أولاً!");
-            await fetch(`${FIREBASE_URL}consultations/${key}/answer.json`, { method: 'PUT', body: JSON.stringify(ansText) });
+            appData.consultations[key].answer = ansText;
             alert("تم إرسال وتثبيت الرد لجهاز السائل بنجاح!");
+            await fetch(`${FIREBASE_URL}consultations/${key}/answer.json`, { method: 'PUT', body: JSON.stringify(ansText) });
             await fetchAllDataFromServer();
-            renderSharedDashboardData();
         }
 
         async function amanyTryChangeCode() {
@@ -798,7 +816,6 @@
             }
             alert("تم توليد 10 عينات وهمية بنجاح إحصائي ممتاز للـ SPSS!");
             await fetchAllDataFromServer();
-            renderSharedDashboardData();
         }
 
         async function clearLogs(nodePath) {
@@ -841,48 +858,4 @@
         }
 
         async function saveAdminAllData() {
-            const updatedSections = [];
-            const activeSecItem = document.querySelector('.page.active .admin-sec-item');
-            const targetSecSelector = activeSecItem ? '.page.active .admin-sec-item' : '.admin-sec-item';
-            
-            document.querySelectorAll(targetSecSelector).forEach(item => {
-                const id = item.getAttribute('data-id');
-                const name = item.querySelector('.sec-name').value.trim();
-                const script = item.querySelector('.sec-script').value.trim();
-                if(name && script) updatedSections.push({ id, name, script });
-            });
-
-            const updatedQuestions = [];
-            const activeQCard = document.querySelector('.page.active .admin-q-card');
-            const targetQSelector = activeQCard ? '.page.active .admin-q-card' : '.admin-q-card';
-
-            document.querySelectorAll(targetQSelector).forEach(card => {
-                const selectEl = card.querySelector('.q-sec-select');
-                if(!selectEl) return;
-                const sectionId = selectEl.value;
-                const q = card.querySelector('.q-text').value.trim();
-                const c = card.querySelector('.q-correct').value;
-                if(sectionId && q && c) updatedQuestions.push({ sectionId, q, c });
-            });
-
-            if(updatedSections.length === 0 && appData.sections.length > 0) {
-                if(!confirm("تنبيه: سيتم حفظ التعديلات، هل تود الاستمرار؟")) return;
-            }
-
-            const payload = {
-                sections: updatedSections.length > 0 ? updatedSections : appData.sections,
-                questions: updatedQuestions.length > 0 ? updatedQuestions : appData.questions,
-                userLogs: appData.userLogs || {},
-                consultations: appData.consultations || {},
-                serverConfig: appData.serverConfig || { devCode: "104230", parentCode: "104230", amanyCode: "*20*30", isLocked: false }
-            };
-
-            try {
-                await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(payload) });
-                alert("تم تحديث وحفظ مصفوفة وهيكلية المنصة بالكامل بنجاح سحابي ممتاز!");
-                location.reload();
-            } catch(e) { alert("حدث خطأ أثناء الحفظ السحابي."); }
-        }
-    </script>
-</body>
-</html>
+            const activePage = document
