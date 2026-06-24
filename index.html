@@ -8,7 +8,6 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="robots" content="noindex, nofollow">
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -35,8 +34,7 @@
         
         .container { background: var(--card); border-radius: 24px; width: 100%; max-width: 950px; padding: 40px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
         
-        /* 🌟 تعديل تصميم شاشة الصيانة لتصبح متناسقة وتدعم الضغط السري */
-        #maintenance-screen { display: none; position: fixed; top:0; left:0; width:100vw; height:100vh; background: var(--bg); z-index: 999999; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; }
+        #maintenance-screen { display: none; position: fixed; top:0; left:0; width:100vw; height:100vh; background: var(--bg); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; }
         #maintenance-screen i { font-size: 70px; color: var(--accent); margin-bottom: 25px; animation: pulse 2s infinite; }
         #maintenance-screen h1 { font-size: 26px; margin-bottom: 15px; color: var(--text); }
         #maintenance-screen p { font-size: 16px; color: var(--muted); max-width: 500px; line-height: 1.8; }
@@ -103,7 +101,19 @@
 
         .platform-footer { position: fixed; bottom: 15px; right: 20px; font-size: 14px; color: var(--muted); font-weight: 600; z-index: 90; direction: ltr; }
         .platform-footer span { color: var(--accent); }
-        .secret-trigger { cursor: default; user-select: none; }
+
+        /* 🔒 كود الحماية والتمويه السري الجديد لمنع التحديد والنسخ والوميض الأزرق */
+        .secret-trigger { 
+            cursor: default; 
+            color: inherit; 
+            text-decoration: none;
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+ */
+            user-select: none; /* المعيار القياسي لمنع التحديد والنسخ */
+            -webkit-tap-highlight-color: transparent; /* إلغاء الوميض الأزرق تماماً على الموبايل عند الضغط */
+            outline: none;
+        }
 
         @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.6; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -111,10 +121,10 @@
 </head>
 <body>
 
-    <!-- 🌟 شاشة الصيانة الذكية الجديدة: تظهر محتوى التحديث مع توفير كلمة "أمان" السرية المفتوحة للضغط دائماً -->
+    <!-- شاشة الصيانة المصلحة والمحمية -->
     <div id="maintenance-screen">
         <i class="fa-solid fa-screwdriver-wrench"></i>
-        <h1>منصة <span class="secret-trigger-lock" style="color: var(--primary); cursor: pointer; text-decoration: underline;">أمان</span> تحت التحديث الآن</h1>
+        <h1>منصة <span class="secret-trigger">أمان</span> تحت التحديث الآن</h1>
         <p>نعمل حالياً على إضافة ميزات بحثية جديدة وتطوير البنية السحابية للمنصة لخدمتكم بشكل أفضل.. سنعود خلال لحظات وجيزة.</p>
     </div>
 
@@ -125,7 +135,7 @@
 
         <!-- 1. صفحة تسجيل الدخول ومتابعة الاستشارات -->
         <div class="page active" id="page-login">
-            <h2 style="text-align: center;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> حزمة <span class="secret-trigger-main" style="color: var(--primary); cursor: pointer;">أمان</span> التوعوية التفاعلية الشاملة</h2>
+            <h2 style="text-align: center;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> حزمة <span class="secret-trigger">أمان</span> التوعوية التفاعلية الشاملة</h2>
             <p style="text-align: center; margin-bottom: 25px;">منصة رقمية متكاملة للقياس المعرفي والاستشارات السرية الفورية ضمن إطار دراسة بحثية أكاديمية.</p>
             
             <form onsubmit="saveUserData(event)">
@@ -158,7 +168,7 @@
             </div>
         </div>
 
-        <!-- 2. شاشة تصفح محاور القياس المعرفي -->
+        <!-- باقي الصفحات كما هي تماماً دون تعديل في تصميمها الإجرائي البارع -->
         <div class="page" id="page-sections">
             <h2>أهلاً بك: <span id="welcome-name" style="color: var(--primary);"></span></h2>
             <p>يرجى اختيار أحد المحاور لبدء فحص الوعي القبلي والبعدي المتكامل:</p>
@@ -166,7 +176,6 @@
             <button class="btn btn-danger" onclick="location.reload()" style="margin-top: 30px;"><i class="fa-solid fa-arrow-right"></i> تسجيل الخروج/العودة للرئيسية</button>
         </div>
 
-        <!-- 3. صفحة مصفوفة أسئلة القياس التفاعلي -->
         <div class="page" id="page-quiz">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h3 id="quiz-type-title" style="color: var(--accent); margin: 0;">أداة القياس</h3>
@@ -178,7 +187,6 @@
             </div>
         </div>
 
-        <!-- 4. صفحة عرض المادة العلمية التمكينية -->
         <div class="page" id="page-awareness">
             <h2><i class="fa-solid fa-book-medical" style="color:var(--primary)"></i> الدليل الوقائي والتوعوي المعتمد</h2>
             <p>يرجى قراءة المادة التوعوية التالية بتمعن لتصحيح المفاهيم قبل اختبار قياس الاستفادة البعدي:</p>
@@ -187,7 +195,6 @@
             <button class="btn btn-block" onclick="startPostQuiz()">الانتقال إلى الاختبار البعدي لقياس الأثر المعرفي <i class="fa-solid fa-arrow-left"></i></button>
         </div>
 
-        <!-- 5. صفحة عرض كارت التمكين والنتائج الإحصائية الفردية -->
         <div class="page" id="page-result">
             <h2 style="text-align: center;"><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> اكتمل المحور البحثي بنجاح</h2>
             <div class="badge-wrapper">
@@ -205,7 +212,7 @@
             <button class="btn btn-block" onclick="showSectionsPage()"><i class="fa-solid fa-arrow-rotate-right"></i> العودة لقائمة المسارات البحثية والمتابعة</button>
         </div>
 
-        <!-- 6. لوحة تحكم د/ أماني الأكاديمية -->
+        <!-- لوحة تحكم د/ أماني الأكاديمية -->
         <div class="page" id="page-admin">
             <h2><i class="fa-solid fa-chart-line" style="color:var(--primary)"></i> أهلاً بكِ يا دكتورة أماني في لوحة الإدارة الأكاديمية</h2>
             <p style="margin-bottom: 25px;">مصفوفة القياس الإحصائي المخصصة لمتابعة الاستجابات وعينة البحث العلمي الحالية.</p>
@@ -246,7 +253,7 @@
             <button class="btn btn-danger btn-block" onclick="showUserPage()">الخروج والعودة لواجهة المنصة</button>
         </div>
 
-        <!-- 7. لوحة تحكم المطور الحصرية الخارقة للبشمهندس محمد -->
+        <!-- لوحة تحكم المطور الحصرية الخارقة للبشمهندس محمد -->
         <div class="page" id="page-dev">
             <div class="server-status">
                 <div class="server-pulse"></div>
@@ -330,9 +337,6 @@
     <div class="platform-footer">Made By DR/ Amany & <span>Mohamed Hossam</span></div>
 
     <script>
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.getRegistrations().then(regs => { for(let r of regs) r.unregister(); }); }
-        if ('caches' in window) { caches.keys().then(names => { for (let name of names) caches.delete(name); }); }
-
         const FIREBASE_URL = "https://aman-10e0a-default-rtdb.firebaseio.com/";
 
         if (!localStorage.getItem('user_device_uuid')) {
@@ -364,19 +368,29 @@
         let secretClickCount = 0, lastClickTime = 0;
         let isDevActive = false;
 
-        // 🌟 دالة معالجة الضغطات الموحدة
-        function handleSecretClick() {
-            const currentTime = new Date().getTime();
-            if (currentTime - lastClickTime < 1500) secretClickCount++;
-            else secretClickCount = 1;
-            lastClickTime = currentTime;
-            if (secretClickCount === 5) { secretClickCount = 0; openAdminViaGesture(); }
+        // 🛡️ نظام الاستماع الحديث والمخفي للضغطات المتتالية دون أي وميض أو كاشف نسخ
+        function initSecretTriggers() {
+            document.querySelectorAll('.secret-trigger').forEach(el => {
+                // إزالة أي مستمع قديم لمنع التكرار
+                el.removeEventListener('click', handleSecretClickEvent);
+                el.addEventListener('click', handleSecretClickEvent);
+            });
         }
 
-        // ربط الضغطات السحرية بكلمة أمان في الواجهة الرئيسية وفي واجهة التحديث المزدوجة
-        document.querySelectorAll('.secret-trigger-main, .secret-trigger-lock').forEach(el => {
-            el.addEventListener('click', handleSecretClick);
-        });
+        function handleSecretClickEvent(e) {
+            const currentTime = new Date().getTime();
+            if (currentTime - lastClickTime < 1500) {
+                secretClickCount++;
+            } else {
+                secretClickCount = 1;
+            }
+            lastClickTime = currentTime;
+            
+            if (secretClickCount === 5) {
+                secretClickCount = 0;
+                setTimeout(() => { openAdminViaGesture(); }, 100);
+            }
+        }
 
         async function fetchAllDataFromServer() {
             try {
@@ -388,42 +402,44 @@
                     appData.userLogs = data.userLogs || {};
                     appData.consultations = data.consultations || {};
                     appData.serverConfig = data.serverConfig || { devCode: "104230", parentCode: "104230", amanyCode: "*20*30", isLocked: false };
-                } else {
-                    await fetch(`${FIREBASE_URL}.json`, { method: 'PUT', body: JSON.stringify(defaultData) });
                 }
                 
                 handleLockMechanism();
+                initSecretTriggers(); // إعادة ربط العناصر بعد التحديث الديناميكي
 
                 if(appData.serverConfig) {
                     const devCodeInput = document.getElementById('dev-my-own-code');
                     const parentCodeInput = document.getElementById('dev-parent-code-input');
                     const amanyCodeInput = document.getElementById('dev-amany-code-input');
 
-                    if (document.activeElement !== devCodeInput) devCodeInput.value = appData.serverConfig.devCode || "104230";
-                    if (document.activeElement !== parentCodeInput) parentCodeInput.value = appData.serverConfig.parentCode || "104230";
-                    if (document.activeElement !== amanyCodeInput) amanyCodeInput.value = appData.serverConfig.amanyCode || "*20*30";
+                    if (document.activeElement !== devCodeInput && devCodeInput) devCodeInput.value = appData.serverConfig.devCode || "104230";
+                    if (document.activeElement !== parentCodeInput && parentCodeInput) parentCodeInput.value = appData.serverConfig.parentCode || "104230";
+                    if (document.activeElement !== amanyCodeInput && amanyCodeInput) amanyCodeInput.value = appData.serverConfig.amanyCode || "*20*30";
                     
                     const lockBtn = document.getElementById('dev-toggle-lock-btn');
-                    if(appData.serverConfig.isLocked) {
-                        lockBtn.innerHTML = 'تعطيل وضع التحديث وتشغيل الموقع فوراً للكل <i class="fa-solid fa-play"></i>';
-                        lockBtn.style.background = "var(--success)";
-                    } else {
-                        lockBtn.innerHTML = 'إغلاق الموقع وتشغيل شاشة التحديث لحظر المستخدمين <i class="fa-solid fa-power-off"></i>';
-                        lockBtn.style.background = "var(--danger)";
+                    if(lockBtn) {
+                        if(appData.serverConfig.isLocked) {
+                            lockBtn.innerHTML = 'تعطيل وضع التحديث وتشغيل الموقع فوراً للكل <i class="fa-solid fa-play"></i>';
+                            lockBtn.style.background = "var(--success)";
+                        } else {
+                            lockBtn.innerHTML = 'إغلاق الموقع وتشغيل شاشة التحديث لحظر المستخدمين <i class="fa-solid fa-power-off"></i>';
+                            lockBtn.style.background = "var(--danger)";
+                        }
                     }
                 }
-                
                 checkDeviceConsultationStatus();
-            } catch (error) { console.log("السيستم يعمل محلياً بسرعة قصوى."); }
+            } catch (error) { console.log("خطأ في الاتصال بالخادم."); }
         }
         
         setInterval(fetchAllDataFromServer, 4000);
-        window.onload = fetchAllDataFromServer;
+        window.onload = () => {
+            fetchAllDataFromServer();
+        };
 
         function handleLockMechanism() {
             const mScreen = document.getElementById('maintenance-screen');
             if (appData.serverConfig && appData.serverConfig.isLocked === true) {
-                if (!isDevActive && document.querySelector('.page.active').id !== 'page-admin') {
+                if (!isDevActive) {
                     mScreen.style.display = "flex";
                 } else {
                     mScreen.style.display = "none";
@@ -447,6 +463,7 @@
             pBar.style.display = (id === 'page-quiz' || id === 'page-awareness' || id === 'page-result') ? 'block' : 'none';
             isDevActive = (id === 'page-dev' || id === 'page-admin');
             handleLockMechanism();
+            setTimeout(initSecretTriggers, 100); // للتأكد من حماية العناصر في الصفحة النشطة
         }
 
         function updateProgressBar(percent) { document.getElementById('global-progress-bar').style.width = percent + "%"; }
@@ -548,7 +565,9 @@
         function checkDeviceConsultationStatus() {
             const statusBox = document.getElementById('user-consultation-status');
             const formBox = document.getElementById('ask-consultation-form');
-            let userQKey = Object.keys(appData.consultations).find(k => appData.consultations[k].deviceId === deviceUuid);
+            if(!statusBox || !formBox) return;
+            
+            let userQKey = Object.keys(appData.consultations || {}).find(k => appData.consultations[k].deviceId === deviceUuid);
 
             if (userQKey) {
                 const userQ = appData.consultations[userQKey];
@@ -604,12 +623,12 @@
 
             if (pass === currentDevCode) {
                 isDevActive = true;
-                renderSharedDashboardData();
                 showPage('page-dev');
+                renderSharedDashboardData();
             } else if (pass === currentAmanyCode) {
                 isDevActive = true; 
-                renderSharedDashboardData();
                 showPage('page-admin');
+                renderSharedDashboardData();
             } else { alert("رمز المرور غير صحيح!"); }
         }
 
@@ -675,6 +694,7 @@
             });
 
             renderDevQuestionsList();
+            setTimeout(initSecretTriggers, 100); // حماية العناصر بعد رندرة البيانات الإضافية
         }
 
         function renderDevQuestionsList() {
@@ -761,7 +781,7 @@
                     await fetchAllDataFromServer();
                 }
             } else {
-                alert("عفواً! الكود الأم الماستر غير صحيح. يرجى مراجعة بشمهندس محمد للحصول عليه.");
+                alert("عفواً! الكود الأم الماستر غير صحيح.");
             }
         }
 
@@ -857,32 +877,29 @@
 
         async function saveAdminAllData() {
             const updatedSections = [];
-            const activeSecItem = document.querySelector('.page.active .admin-sec-item');
-            const targetSecSelector = activeSecItem ? '.page.active .admin-sec-item' : '.admin-sec-item';
-            
-            document.querySelectorAll(targetSecSelector).forEach(item => {
+            document.querySelectorAll('.page.active .admin-sec-item, .admin-sec-item').forEach(item => {
                 const id = item.getAttribute('data-id');
-                const name = item.querySelector('.sec-name').value.trim();
-                const script = item.querySelector('.sec-script').value.trim();
-                if(name && script) updatedSections.push({ id, name, script });
+                const nameInput = item.querySelector('.sec-name');
+                const scriptInput = item.querySelector('.sec-script');
+                if(nameInput && scriptInput) {
+                    const name = nameInput.value.trim();
+                    const script = scriptInput.value.trim();
+                    if(name && script && !updatedSections.find(x => x.id === id)) updatedSections.push({ id, name, script });
+                }
             });
 
             const updatedQuestions = [];
-            const activeQCard = document.querySelector('.page.active .admin-q-card');
-            const targetQSelector = activeQCard ? '.page.active .admin-q-card' : '.admin-q-card';
-
-            document.querySelectorAll(targetQSelector).forEach(card => {
+            document.querySelectorAll('.page.active .admin-q-card, .admin-q-card').forEach(card => {
                 const selectEl = card.querySelector('.q-sec-select');
-                if(!selectEl) return;
-                const sectionId = selectEl.value;
-                const q = card.querySelector('.q-text').value.trim();
-                const c = card.querySelector('.q-correct').value;
-                if(sectionId && q && c) updatedQuestions.push({ sectionId, q, c });
+                const qInput = card.querySelector('.q-text');
+                const cSelect = card.querySelector('.q-correct');
+                if(selectEl && qInput && cSelect) {
+                    const sectionId = selectEl.value;
+                    const q = qInput.value.trim();
+                    const c = cSelect.value;
+                    if(sectionId && q && c) updatedQuestions.push({ sectionId, q, c });
+                }
             });
-
-            if(updatedSections.length === 0 && appData.sections.length > 0) {
-                if(!confirm("تنبيه: سيتم حفظ التعديلات، هل تود الاستمرار؟")) return;
-            }
 
             const payload = {
                 sections: updatedSections.length > 0 ? updatedSections : appData.sections,
